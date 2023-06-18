@@ -45,14 +45,19 @@ def main():
             continue
             
     logger.log("Connected to server")
-    
-    
+    is_connected = True
     
     while True:
-        logger.log(" * Waiting for server")
-        client_socket.send("SYN".encode())
-        server_ack = client_socket.recv(1024).decode()
-            
+        
+        logger.log(" * Waiting in maintenance mode")
+        client_socket.send("MTN".encode())
+        MNTN_recv = client_socket.recv(1024).decode()
+        is_connected = MNTN_recv == "MTNOK"
+        
+        
+        # Add visual element that displays connection status !!!!!!!!!
+        
+        
         screen.fill((0, 0, 0))
         draw_opening_screen(screen)
         

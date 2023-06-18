@@ -64,7 +64,11 @@ class Server:
             if not data:
                 self.logger.log(" * Client disconnected from %s:%d" % (address[0], address[1]))
                 break
-            self.logger.log(" * Data Recived: %s" % data.decode())
+            if(data.decode() == "MTN"):
+                self.logger.log(" * Client requested MTN")
+                client.send("MTNOK".encode())
+            
+                
         
     def kill(self):
         for thread in self.threads_queue:
