@@ -67,6 +67,8 @@ class Server:
             if(data.decode() == "MTN"):
                 self.logger.log(" * Client requested MTN")
                 client.send("MTNOK".encode())
+            elif(data.decode() == "GAME_START"):
+                self.logger.log(" * Client requested GAME_START")
             
                 
         

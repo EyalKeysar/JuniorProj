@@ -6,9 +6,11 @@ from Player import Player
 import sys
 
 class Game:
-    def __init__(self):
+    def __init__(self, socket):
         
-        # self.username = username
+        self.socket = socket
+        
+        self.socket.send("GAME_START".encode())
         
         pygame.init()
         self.screen_width = SCREEN_WIDTH
