@@ -12,7 +12,7 @@ from game import Game
 def CreateSocket(logger):
     data = ""
     client_socket = socket.socket()
-    client_socket.settimeout(2)
+    client_socket.settimeout(0.5)
     while data != "ACK":
         pygame.display.update()
         for event in pygame.event.get():
@@ -28,8 +28,9 @@ def CreateSocket(logger):
             logger.log(" Server replied: " + data)
             
         except Exception as e:
-            logger.log(" * Failed To Connect \n" + str(e))
-            time.sleep(1)
+            logger.log(" * Failed To Create Socket \n" + str(e))
+            client_socket = socket.socket()
+            client_socket.settimeout(0.5)
             continue
         
     return client_socket
@@ -66,13 +67,11 @@ def main():
                 logger.log(" * Server Refresh, Creating another socket")
                 client_socket = CreateSocket(logger)
             else:
-                logger.log(" * Failed to send MTN request \n" + str(e))
+                logger.log(" * Failed to send MTN request\nerrno:" + str(e.errno) + "\n" + str(e))
             continue
-        # Add visual element that displays connection status !!!!!!!!!
         
         draw_opening_screen(screen, is_connected)
         
-        #update the display
         
         # Check for the user closing the window
         for event in pygame.event.get():
