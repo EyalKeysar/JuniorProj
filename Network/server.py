@@ -38,10 +38,10 @@ class Server:
         timeout = 0
         handshake_data = ""
         # Wait for handshake from client.
-        while handshake_data != "SYN":
+        while handshake_data != SYN_REQ:
             try:
                 handshake_data = client.recv(1024).decode()
-                if(handshake_data != "SYN"):
+                if(handshake_data != SYN_REQ):
                     raise ConnectionError
                 self.logger.log("Sending ack to client")
                 client.send("ACK".encode())
