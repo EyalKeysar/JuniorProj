@@ -5,6 +5,7 @@ import sys
 import os
 import random
 from constants import *
+sys.path.append('../')
 from logger import Logger
 
 class Server:

@@ -4,13 +4,12 @@ import os
 import time
 import socket
 from GameConstants import *
-from logger import Logger
 from Network.constants import *
 from game import Game
 from draws import *
 from networks import *
-
-
+from logger import Logger
+from lobby_handler import LobbyHandler
 
 
 def main():
@@ -23,7 +22,7 @@ def main():
     pygame.display.set_caption(GAME_NAME)
     clock = pygame.time.Clock()
 
-    draw_opening_screen(screen, False)
+    draw_opening_screen(screen, False, False)
     
     client_socket = CreateSocket(logger)
             
@@ -34,21 +33,20 @@ def main():
     while True:
         logger.log(" * Waiting in maintenance mode")
         try:
-            client_socket.send("MTN".encode())
-            MNTN_recv = client_socket.recv(1024).decode()
-            is_connected = MNTN_recv == "MTNOK"
+            is_connected = CheckConnection(client_socket)
         except Exception as e:
+            logger.log(" * Connection to server lost")
             is_connected = False
             draw_opening_screen(screen, is_connected)
-            
-            if(e.errno == 10054 or e.errno == 10056):
-                logger.log(" * Server Refresh, Creating another socket")
-                client_socket = CreateSocket(logger)
-            else:
-                logger.log(" * Failed to send MTN request\nerrno:" + str(e.errno) + "\n" + str(e))
+            client_socket = HandelConnectionError(e, logger, client_socket)
             continue
         
-        draw_opening_screen(screen, is_connected)
+        mouse_pos = pygame.mouse.get_pos()
+        mouse_over_start_button = mouse_pos[0] >= STARTGAME_BTN_LEFT and mouse_pos[0] <= STARTGAME_BTN_LEFT+STARTGAME_BTN_WIDTH and mouse_pos[1] >= STARTGAME_BTN_TOP and mouse_pos[1] <= STARTGAME_BTN_TOP+STARTGAME_BTN_HEIGHT
+        if(mouse_over_start_button):
+            draw_opening_screen(screen, is_connected, True)
+        else:
+            draw_opening_screen(screen, is_connected, False)
         
         
         # Check for the user closing the window
@@ -62,7 +60,8 @@ def main():
                     # Check if the user clicked on the start button, and initiate the game.
                     mouse_over_start_button = mouse_pos[0] >= STARTGAME_BTN_LEFT and mouse_pos[0] <= STARTGAME_BTN_LEFT+STARTGAME_BTN_WIDTH and mouse_pos[1] >= STARTGAME_BTN_TOP and mouse_pos[1] <= STARTGAME_BTN_TOP+STARTGAME_BTN_HEIGHT
                     if(mouse_over_start_button):
-                        Game(client_socket).run()
+                        logger.log(" * Starting game -----------------------------------")
+                        LobbyHandler(screen, client_socket, logger).run()
                         main()
                         return
                         
