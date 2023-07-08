@@ -3,6 +3,7 @@ SERVER_PORT = 1112
 
 # Connection Protocol
 SYN_REQ = "SYN" # Synchronize Request
+SYN_REQ_LEN = 2
 SYN_ACK = "ACK" # Synchronize Acknowledged
 
 

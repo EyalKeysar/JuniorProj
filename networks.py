@@ -1,9 +1,10 @@
 
+import  sys
+from Network.constants import *
+sys.path.append("..\\")
 from GameConstants import *
 import socket
 import pygame
-from Network.constants import *
-import sys
 
 def CreateSocket(logger):
     """
@@ -14,7 +15,7 @@ def CreateSocket(logger):
     """
     data_from_server = ""
     client_socket = socket.socket()
-    client_socket.settimeout(0.5)
+    client_socket.settimeout(2)
 
     while data_from_server != SYN_ACK:
         # Pygame maintenance
@@ -62,4 +63,55 @@ def HandelConnectionError(e, logger, client_socket):
     else:
         logger.log(" * Failed to send MTN request\nerrno:" + str(e.errno) + "\n" + str(e))
     return client_socket
+    
+
+def send_active_players(client_socket, active_players, logger):
+    """
+        Sends the active players to the server.
+    """
+    logger.log(" * Sending active players")
+    try:
+        client_socket.send((str(len(active_players)) + str('=')).encode())
+        active_players_str = ""
+        
+        for player in active_players:
+            active_players_str += str(player) + str(";")
+        logger.log(" * Sending active players: " + active_players_str)
+        client_socket.send(active_players_str.encode())
+
+    except Exception as e:
+        logger.log(" * Failed to send active players\n" + str(e))
+    return client_socket
+
+def get_active_players(client_socket, logger):
+    """
+        Gets the active players from the server.
+    """
+    logger.log(" * Getting active players")
+
+    client_socket.send(GET_ACTIVE_PLAYERS.encode())
+    players = []
+    num_of_players = ""
+    logger.log(" * che1")
+    cur_char = client_socket.recv(1).decode()
+    logger.log(" * che2")
+
+    while cur_char != '=':
+        num_of_players += cur_char
+        cur_char = client_socket.recv(1).decode()
+
+    num_of_players = int(num_of_players)
+    logger.log(" * Number of active players: " + str(num_of_players))
+
+    for i in range(num_of_players):
+        cur_player = ""
+        cur_char = client_socket.recv(1).decode()
+        while cur_char != ';':
+            cur_player += cur_char
+            cur_char = client_socket.recv(1).decode()
+        players.append(cur_player)
+
+
+
+    logger.log(" * Got active players: " + str(players))
     

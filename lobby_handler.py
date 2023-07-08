@@ -14,14 +14,15 @@ class LobbyHandler:
         self.logger.log(" * Lobby Handler started running")
         while True:
             try:
-                self.is_connected = CheckConnection(self.client_socket)
+                # self.is_connected = CheckConnection(self.client_socket)
+                active_players = get_active_players(self.client_socket, self.logger)
             except Exception as e:
                 self.logger.log(" * Connection to server lost")
                 self.is_connected = False
 
                 draw_lobby_screen(self.screen, self.is_connected)
 
-                client_socket = HandelConnectionError(e, self.logger, client_socket)
+                client_socket = HandelConnectionError(e, self.logger, self.client_socket)
                 continue
 
             draw_lobby_screen(self.screen, self.is_connected)
