@@ -69,7 +69,6 @@ def send_active_players(client_socket, active_players, logger):
     """
         Sends the active players to the server.
     """
-    logger.log(" * Sending active players")
     try:
         client_socket.send((str(len(active_players)) + str('=')).encode())
         active_players_str = ""
@@ -86,22 +85,20 @@ def send_active_players(client_socket, active_players, logger):
 def get_active_players(client_socket, logger):
     """
         Gets the active players from the server.
+
     """
     logger.log(" * Getting active players")
 
     client_socket.send(GET_ACTIVE_PLAYERS.encode())
     players = []
     num_of_players = ""
-    logger.log(" * che1")
     cur_char = client_socket.recv(1).decode()
-    logger.log(" * che2")
 
     while cur_char != '=':
         num_of_players += cur_char
         cur_char = client_socket.recv(1).decode()
 
     num_of_players = int(num_of_players)
-    logger.log(" * Number of active players: " + str(num_of_players))
 
     for i in range(num_of_players):
         cur_player = ""
@@ -110,8 +107,3 @@ def get_active_players(client_socket, logger):
             cur_player += cur_char
             cur_char = client_socket.recv(1).decode()
         players.append(cur_player)
-
-
-
-    logger.log(" * Got active players: " + str(players))
-    

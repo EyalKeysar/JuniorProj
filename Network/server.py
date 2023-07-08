@@ -31,7 +31,7 @@ class Server:
             client, address = self.server_socket.accept()
             self.logger.log(" * Client connected from %s:%d" % (address[0], address[1]))
             self.client_queue.append(client)
-            self.active_players.append(address)
+            self.active_players.append(address[0])
             
             # Handle the connection.
             client_thread = threading.Thread(target=self.handle_connection, args=(client, address))
@@ -81,9 +81,7 @@ class Server:
                     self.logger.log(" * Client requested MTN")
                     client.send(MAINTAIN_OK.encode())
                 elif(data.decode() == GET_ACTIVE_PLAYERS):
-                    self.logger.log(" * Client requested GAP")
                     send_active_players(client, self.active_players, self.logger)
-                    self.logger.log(" * Sent GAP")
 
             except Exception as e:
                 self.logger.log(" * Client disconnected from %s:%d\n Internal exception raised: %s" % (address[0], address[1], e))
