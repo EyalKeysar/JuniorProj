@@ -37,7 +37,7 @@ def main():
         except Exception as e:
             logger.log(" * Connection to server lost")
             is_connected = False
-            draw_opening_screen(screen, is_connected)
+            draw_opening_screen(screen, is_connected, False)
             client_socket = HandelConnectionError(e, logger, client_socket)
             continue
         
@@ -60,7 +60,7 @@ def main():
                     # Check if the user clicked on the start button, and initiate the game.
                     mouse_over_start_button = mouse_pos[0] >= STARTGAME_BTN_LEFT and mouse_pos[0] <= STARTGAME_BTN_LEFT+STARTGAME_BTN_WIDTH and mouse_pos[1] >= STARTGAME_BTN_TOP and mouse_pos[1] <= STARTGAME_BTN_TOP+STARTGAME_BTN_HEIGHT
                     if(mouse_over_start_button):
-                        logger.log(" * Starting game -----------------------------------")
+                        logger.log(" * Join Lobby -----------------------------------")
                         LobbyHandler(screen, client_socket, logger).run()
                         main()
                         return

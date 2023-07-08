@@ -5,6 +5,7 @@ import sys
 import os
 import random
 from constants import *
+
 sys.path.append('../')
 from logger import Logger
 
@@ -32,8 +33,12 @@ class Server:
             
             # Handle the connection.
             client_thread = threading.Thread(target=self.handle_connection, args=(client, address))
-            client_thread.start()
-            self.threads_queue.append(client_thread)
+            
+            try:
+                client_thread.start()
+                self.threads_queue.append(client_thread)
+            except Exception as e:
+                self.logger.log(" * Failed to run thread \n" + str(e))
         
     def handle_connection(self, client, address):
         timeout = 0
@@ -61,15 +66,23 @@ class Server:
         # Handshake successful, start game.
                 
         while True:
-            data = client.recv(1024)
-            if not data:
-                self.logger.log(" * Client disconnected from %s:%d" % (address[0], address[1]))
-                break
-            if(data.decode() == "MTN"):
-                self.logger.log(" * Client requested MTN")
-                client.send("MTNOK".encode())
-            elif(data.decode() == "GAME_START"):
-                self.logger.log(" * Client requested GAME_START")
+            try:
+                data = client.recv(1024)
+                if not data:
+                    self.logger.log(" * Client disconnected from %s:%d" % (address[0], address[1]))
+                    self.client_queue.remove(client)
+                    self.threads_queue.remove(threading.current_thread())
+                    return
+                if(data.decode() == MAINTAIN_CONNECTION):
+                    self.logger.log(" * Client requested MTN")
+                    client.send(MAINTAIN_OK.encode())
+                if(data.decode() == GET_ACTIVE_PLAYERS):
+                    pass
+            except Exception as e:
+                self.logger.log(" * Client disconnected from %s:%d\n Internal exception raised: %s" % (address[0], address[1], e))
+                self.client_queue.remove(client)
+                self.threads_queue.remove(threading.current_thread())
+                return
             
                 
         

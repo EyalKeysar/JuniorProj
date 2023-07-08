@@ -8,6 +8,7 @@ class LobbyHandler:
         self.client_socket = client_socket
         self.logger = logger
         self.is_connected = True
+        self.available_players = []
 
     def run(self):
         self.logger.log(" * Lobby Handler started running")
