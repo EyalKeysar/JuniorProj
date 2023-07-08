@@ -15,7 +15,7 @@ def CreateSocket(logger):
     """
     data_from_server = ""
     client_socket = socket.socket()
-    client_socket.settimeout(2)
+    client_socket.settimeout(0.5)
 
     while data_from_server != SYN_ACK:
         # Pygame maintenance
@@ -75,7 +75,6 @@ def send_active_players(client_socket, active_players, logger):
         
         for player in active_players:
             active_players_str += str(player) + str(";")
-        logger.log(" * Sending active players: " + active_players_str)
         client_socket.send(active_players_str.encode())
 
     except Exception as e:
@@ -87,8 +86,6 @@ def get_active_players(client_socket, logger):
         Gets the active players from the server.
 
     """
-    logger.log(" * Getting active players")
-
     client_socket.send(GET_ACTIVE_PLAYERS.encode())
     players = []
     num_of_players = ""
