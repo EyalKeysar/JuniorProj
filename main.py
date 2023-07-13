@@ -29,43 +29,46 @@ def main():
     logger.log("Connected to server")
 
     is_connected = True
+    main_loop(logger, screen, client_socket, is_connected)
     
-    while True:
-        logger.log(" * Waiting in maintenance mode")
-        try:
-            is_connected = CheckConnection(client_socket)
-        except Exception as e:
-            logger.log(" * Connection to server lost")
-            is_connected = False
-            draw_opening_screen(screen, is_connected, False)
-            client_socket = HandelConnectionError(e, logger, client_socket)
-            continue
-        
-        mouse_pos = pygame.mouse.get_pos()
-        mouse_over_start_button = mouse_pos[0] >= STARTGAME_BTN_LEFT and mouse_pos[0] <= STARTGAME_BTN_LEFT+STARTGAME_BTN_WIDTH and mouse_pos[1] >= STARTGAME_BTN_TOP and mouse_pos[1] <= STARTGAME_BTN_TOP+STARTGAME_BTN_HEIGHT
-        if(mouse_over_start_button):
-            draw_opening_screen(screen, is_connected, True)
-        else:
-            draw_opening_screen(screen, is_connected, False)
-        
-        
-        # Check for the user closing the window
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if(pygame.mouse.get_pressed()[0] == True):
-                    mouse_pos = pygame.mouse.get_pos()
-                    # Check if the user clicked on the start button, and initiate the game.
-                    mouse_over_start_button = mouse_pos[0] >= STARTGAME_BTN_LEFT and mouse_pos[0] <= STARTGAME_BTN_LEFT+STARTGAME_BTN_WIDTH and mouse_pos[1] >= STARTGAME_BTN_TOP and mouse_pos[1] <= STARTGAME_BTN_TOP+STARTGAME_BTN_HEIGHT
-                    if(mouse_over_start_button):
-                        logger.log(" * Join Lobby -----------------------------------")
-                        client_socket = LobbyHandler(screen, client_socket, logger).run()
-                        main()
-                        return
+    
                         
     
+def main_loop(logger, screen, client_socket, is_connected):
+    while True:
+            logger.log(" * Waiting in maintenance mode")
+            try:
+                is_connected = CheckConnection(client_socket)
+            except Exception as e:
+                logger.log(" * Connection to server lost")
+                is_connected = False
+                draw_opening_screen(screen, is_connected, False)
+                client_socket = HandelConnectionError(e, logger, client_socket)
+                continue
+            
+            mouse_pos = pygame.mouse.get_pos()
+            mouse_over_start_button = mouse_pos[0] >= STARTGAME_BTN_LEFT and mouse_pos[0] <= STARTGAME_BTN_LEFT+STARTGAME_BTN_WIDTH and mouse_pos[1] >= STARTGAME_BTN_TOP and mouse_pos[1] <= STARTGAME_BTN_TOP+STARTGAME_BTN_HEIGHT
+            if(mouse_over_start_button):
+                draw_opening_screen(screen, is_connected, True)
+            else:
+                draw_opening_screen(screen, is_connected, False)
+            
+            
+            # Check for the user closing the window
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if(pygame.mouse.get_pressed()[0] == True):
+                        mouse_pos = pygame.mouse.get_pos()
+                        # Check if the user clicked on the start button, and initiate the game.
+                        mouse_over_start_button = mouse_pos[0] >= STARTGAME_BTN_LEFT and mouse_pos[0] <= STARTGAME_BTN_LEFT+STARTGAME_BTN_WIDTH and mouse_pos[1] >= STARTGAME_BTN_TOP and mouse_pos[1] <= STARTGAME_BTN_TOP+STARTGAME_BTN_HEIGHT
+                        if(mouse_over_start_button):
+                            logger.log(" * Join Lobby -----------------------------------")
+                            client_socket = LobbyHandler(screen, client_socket, logger).run()
+                            continue
+
     
 if __name__ == "__main__":
     main()

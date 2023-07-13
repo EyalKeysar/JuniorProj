@@ -92,7 +92,7 @@ def get_active_players(client_socket, logger):
     num_of_players = ""
     cur_char = client_socket.recv(1).decode()
 
-    while cur_char != '=':
+    while cur_char != BETWEEN_PLAYER_LIST_CHAR:
         num_of_players += cur_char
         cur_char = client_socket.recv(1).decode()
 
@@ -101,7 +101,7 @@ def get_active_players(client_socket, logger):
     for i in range(num_of_players):
         cur_player = ""
         cur_char = client_socket.recv(1).decode()
-        while cur_char != ';':
+        while cur_char != END_PLAYER_LIST_CHAR:
             cur_player += cur_char
             cur_char = client_socket.recv(1).decode()
         players.append(cur_player)

@@ -52,7 +52,7 @@ class Server:
                 if(handshake_data != SYN_REQ):
                     raise ConnectionError
                 self.logger.log("Sending ack to client")
-                client.send("ACK".encode())
+                client.send(SYN_ACK.encode())
 
             except Exception as e:
                 # If handshake failed, close connection.
