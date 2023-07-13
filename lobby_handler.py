@@ -16,6 +16,7 @@ class LobbyHandler:
             try:
                 self.is_connected = CheckConnection(self.client_socket)
                 active_players = get_active_players(self.client_socket, self.logger)
+                self.logger.log(" * Active players: %s" % active_players)
             except Exception as e:
                 self.logger.log(" * Connection to server lost")
                 self.is_connected = False
@@ -30,4 +31,4 @@ class LobbyHandler:
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    return
+                    return self.client_socket

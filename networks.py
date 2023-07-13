@@ -76,6 +76,7 @@ def send_active_players(client_socket, active_players, logger):
         for player in active_players:
             active_players_str += str(player) + str(";")
         client_socket.send(active_players_str.encode())
+        logger.log(" * sent %s " % str(active_players))
 
     except Exception as e:
         logger.log(" * Failed to send active players\n" + str(e))
@@ -104,3 +105,4 @@ def get_active_players(client_socket, logger):
             cur_player += cur_char
             cur_char = client_socket.recv(1).decode()
         players.append(cur_player)
+    return players

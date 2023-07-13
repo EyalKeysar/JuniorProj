@@ -60,8 +60,8 @@ class Server:
                 if(timeout > 10):
                     client.close()
                     self.logger.log(" * Client disconnected from %s:%d\n Internal exception raised: %s" % (address[0], address[1], e))
-                    self.client_queue.remove(client)
-                    self.active_players.remove(address)
+                    # self.client_queue.remove(client)
+                    self.active_players.remove(address[0])
                     self.threads_queue.remove(threading.current_thread())
                     return
         
@@ -73,8 +73,8 @@ class Server:
                 data = client.recv(1024)
                 if not data:
                     self.logger.log(" * Client disconnected from %s:%d" % (address[0], address[1]))
-                    self.client_queue.remove(client)
-                    self.active_players.remove(address)
+                    # self.client_queue.remove(client)
+                    self.active_players.remove(address[0])
                     self.threads_queue.remove(threading.current_thread())
                     return
                 if(data.decode() == MAINTAIN_CONNECTION):
@@ -85,8 +85,8 @@ class Server:
 
             except Exception as e:
                 self.logger.log(" * Client disconnected from %s:%d\n Internal exception raised: %s" % (address[0], address[1], e))
-                self.client_queue.remove(client)
-                self.active_players.remove(address)
+                # self.client_queue.remove(client)
+                self.active_players.remove(address[0])
                 self.threads_queue.remove(threading.current_thread())
                 return
             

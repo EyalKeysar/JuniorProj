@@ -61,7 +61,7 @@ def main():
                     mouse_over_start_button = mouse_pos[0] >= STARTGAME_BTN_LEFT and mouse_pos[0] <= STARTGAME_BTN_LEFT+STARTGAME_BTN_WIDTH and mouse_pos[1] >= STARTGAME_BTN_TOP and mouse_pos[1] <= STARTGAME_BTN_TOP+STARTGAME_BTN_HEIGHT
                     if(mouse_over_start_button):
                         logger.log(" * Join Lobby -----------------------------------")
-                        LobbyHandler(screen, client_socket, logger).run()
+                        client_socket = LobbyHandler(screen, client_socket, logger).run()
                         main()
                         return
                         
