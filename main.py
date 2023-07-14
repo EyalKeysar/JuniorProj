@@ -1,4 +1,10 @@
-import pygame
+import kivy
+from kivy.app import App
+from kivy.uix.label import Label
+
+kivy.require('2.2.1') 
+
+
 import sys
 import os
 import time
@@ -10,7 +16,6 @@ from draws import *
 from networks import *
 from logger import Logger
 from lobby_handler import LobbyHandler
-from Button import Button
 
 
 def main():
@@ -18,17 +23,7 @@ def main():
     logger.log(" * Starting game")
     
     # Initializition
-    pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption(GAME_NAME)
-    clock = pygame.time.Clock()
 
-    global start_game_button
-    start_game_button = Button(STARTGAME_BTN_COLOR, STARTGAME_BTN_COLOR_HOVER,
-                               STARTGAME_BTN_TXT, STARTGAME_BTN_FONT_SIZE, (0, 0, 0), 
-                               STARTGAME_BTN_X, STARTGAME_BTN_Y, STARTGAME_BTN_WIDTH, STARTGAME_BTN_HEIGHT)
-                               
-    draw_opening_screen(screen, False, start_game_button, False)
     client_socket = CreateSocket(logger)
     logger.log("Connected to server")
 
