@@ -22,11 +22,18 @@ class LobbyHandler:
                 self.is_connected = False
 
                 draw_lobby_screen(self.screen, self.is_connected)
+                return self.client_socket
 
-                self.client_socket = HandelConnectionError(e, self.logger, self.client_socket)
-                continue
 
-            draw_lobby_screen(self.screen, self.is_connected)
+            active_players_btn_list = []
+            for player in active_players:
+                active_players_btn_list.append(Button(ACTPLABTN_COLOR, ACTPLABTN_COLOR_HOVER,
+                                                       player, ACTPLABTN_FONT_SIZE, ACTPLABTN_TXT_CLR,
+                                                         ACTPLABTN_X, (active_players.index(player) * ACTPLABTN_HEIGHT),
+                                                         ACTPLABTN_WIDTH, ACTPLABTN_HEIGHT))
+
+
+            draw_lobby_screen(self.screen, self.is_connected, active_players_btn_list)
 
 
             for event in pygame.event.get():

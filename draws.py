@@ -1,6 +1,7 @@
 import pygame
 from GameConstants import *
 import sys
+from Button import Button
 
 
 def draw_title(screen, x, y, color, text):
@@ -29,39 +30,36 @@ def draw_connection_status(screen, is_connected):
     text_rect.center = connection_rect.center
     screen.blit(text, text_rect)
 
-def draw_button(screen, x, y, width, height, color, text, text_color):
-    button = pygame.Rect(x, y, width, height)
-    pygame.draw.rect(screen, color, button)
-    text_font = pygame.font.Font(TEXT_FONT, 32)
-    text = text_font.render(text, True, text_color)
-    text_rect = text.get_rect()
-    text_rect.center = button.center
-    screen.blit(text, text_rect)
-
-def draw_start_button(screen, color=STARTGAME_BTN_COLOR, text_color=STARTGAME_BTN_TXT_CLR):
-    draw_button(screen, STARTGAME_BTN_LEFT, STARTGAME_BTN_TOP, STARTGAME_BTN_WIDTH, STARTGAME_BTN_HEIGHT, color, STARTGAME_BTN_TXT, text_color)
-
-def draw_opening_screen(screen, is_connected, hover_start_button):
+def draw_opening_screen(screen, is_connected, start_button, is_over):
     # Fill the screen with black
     screen.fill((0, 0, 0))
     # Draw the title text
     draw_title(screen, x=SCREEN_WIDTH/2, y=SCREEN_HEIGHT/4, color=(255, 0, 0), text=GAME_NAME)
     # Draw the start button
-    if(hover_start_button):
-        draw_start_button(screen, color=STARTGAME_BTN_COLOR_HOVER)
+    if(is_over):
+        start_button.draw(screen, True)
     else:
-        draw_start_button(screen)
+        start_button.draw(screen, False)
     # Draw the connection status
     draw_connection_status(screen, is_connected)
     
     pygame.display.update()
     
+def draw_active_players(screen, active_players_btn_lst):
+    '''Draws a block with list of buttons, each button text is from the active_players list using Button class'''
+    for btn in active_players_btn_lst:
+        btn.draw(screen)
+    
 
-def draw_lobby_screen(screen, is_connected):
+
+    
+
+def draw_lobby_screen(screen, is_connected, active_players_btn_lst):
     screen.fill((0, 0, 0))
-
     draw_title(screen, SCREEN_WIDTH/2, SCREEN_HEIGHT/7, (255, 0, 0), LOBBY_TITLE)
     
+    draw_active_players(screen, active_players_btn_lst)
+
     draw_connection_status(screen, is_connected)
 
     pygame.display.update()
