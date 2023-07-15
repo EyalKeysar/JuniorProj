@@ -1,5 +1,6 @@
 <MainGrid>
 
+    name: name
 
     GridLayout:
         size: root.width, root.height
@@ -14,6 +15,7 @@
                 multiline: False
 
         Button:
+            on_press: root.btn()
             text: "Submit"
     # GridLayout:
 
