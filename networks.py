@@ -4,7 +4,6 @@ from Network.constants import *
 sys.path.append("..\\")
 from GameConstants import *
 import socket
-import pygame
 
 def CreateSocket(logger):
     """
@@ -18,13 +17,6 @@ def CreateSocket(logger):
     client_socket.settimeout(0.5)
 
     while data_from_server != SYN_ACK:
-        # Pygame maintenance
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            
         # Try to connect to the server and perform handshake.    
         try:
             client_socket.connect(("127.0.0.2", SERVER_PORT))
