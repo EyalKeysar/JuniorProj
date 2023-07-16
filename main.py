@@ -4,6 +4,9 @@ from kivy.uix.label import Label
 from kivy.config import Config
 Config.set('kivy', 'window_icon', './Assets/game_icon.png') 
 
+from screens.signinscreen import SignInScreen
+from kivy.uix.screenmanager import ScreenManager
+
 import sys
 import os
 from multiprocessing import Process
@@ -14,17 +17,16 @@ from Network.constants import *
 from game import Game
 from networks import *
 from logger import Logger
-from signinapp import SignInApp
 from network_handler import NetworkHandler
 
+class RootScreenManager(ScreenManager):
+    pass
 
-def main():
-    logger =  Logger() 
-    logger.log(" * Starting game")
+class MainApp(App):
+    def build(self):
+        return RootScreenManager()
     
-    SignInApp().run()
-    logger.log(" * Game ended")
-
 
 if __name__ == "__main__":
-    main()
+    MainApp().run()
+
