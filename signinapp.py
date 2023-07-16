@@ -17,38 +17,14 @@ class SignUpWindow(Screen):
     pass
 
 class WindowManager(ScreenManager):
-    def __init__(self, network_handler, **kwargs):
+    def __init__(self, **kwargs):
+        print("WindowManager init")
         super().__init__(**kwargs)
-        self.network_handler = network_handler
-        Clock.schedule_interval(self.connection_bar_update, 1.0 / 60.0)
 
-    def connection_bar_update(self, dt):
-        self.connection_status_bar.color = (0, 1, 0, 1) if self.network_handler.connection_status else (1, 0, 0, 1)
 
 class SignInApp(App):
-
-    def __init__(self, logger, **kwargs):
-        super().__init__(**kwargs)
-        self.logger = logger
-        self.connection_status = False
-        self.network_handler = NetworkHandler(self.logger)
-
     def build(self):
-        self.logger.log(" * Built game ----------------------------------------------------------------")
-        window_manager = WindowManager(network_handler=self.network_handler)
-        self.network_handler.CreateSocket()
-        Clock.schedule_interval(self.network_update, 1.0 / 60.0)
-        return window_manager
-    
-    def run(self):
-        self.logger.log(" * Running game")
-        return super().run()
-    
-    def network_update(self, dt):
-        self.network_handler.CheckConnection()
-        self.update_connection_status_bar()
-
-    def update_connection_status_bar(self):
-        self.connection_status = self.network_handler.connection_status
+        kv = Builder.load_file("signin.kv")
+        return kv
         
 

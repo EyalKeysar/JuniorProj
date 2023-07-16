@@ -15,22 +15,14 @@ from game import Game
 from networks import *
 from logger import Logger
 from signinapp import SignInApp
+from network_handler import NetworkHandler
 
 
 def main():
     logger =  Logger() 
     logger.log(" * Starting game")
     
-
-    # client_socket = CreateSocket(logger)
-    # logger.log("Connected to server")
-
-    is_connected = True
-
-    # p1 = Process(target=main_loop, args=(logger, client_socket, is_connected))
-    # p1.start()
-    
-    SignInApp(logger).run()
+    SignInApp().run()
     logger.log(" * Game ended")
 
 
