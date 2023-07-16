@@ -2,7 +2,6 @@
 import  sys
 from Network.constants import *
 sys.path.append("..\\")
-from GameConstants import *
 import socket
 import pygame
 
