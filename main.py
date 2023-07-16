@@ -1,32 +1,17 @@
-import kivy
-from kivy.app import App
-from kivy.uix.label import Label
-from kivy.config import Config
-Config.set('kivy', 'window_icon', './Assets/game_icon.png') 
-
-from screens.signinscreen import SignInScreen
-from kivy.uix.screenmanager import ScreenManager
-
-import sys
-import os
-from multiprocessing import Process
-import time
-import socket
+import tkinter as tk
+from SignInConstants import *
 from GameConstants import *
-from Network.constants import *
-from game import Game
-from networks import *
-from logger import Logger
-from network_handler import NetworkHandler
+from TkScreen import TkScreen
 
-class RootScreenManager(ScreenManager):
-    pass
 
-class MainApp(App):
-    def build(self):
-        return RootScreenManager()
+def main_screen():
+    new_screen = TkScreen(
+                            widget1=tk.Label(text="Disconnected", bg="#FF0000", width=SCREEN_WIDTH, height=CONNECTIONSTATUSBARHEIGHT),
+                            widget2=tk.Label(text = SIGNINTITLETXT, bg = TITLEBGCLR, width=SCREEN_WIDTH, height=SIGNINTITLETXTHEIGHT, font = SIGNINTXTFONT),
+                            widget3=tk.Button(text = "Login", font=BTNFONT, bg=BTNBGCLR, width=SIGNINBUTTONWIDTH, height=SIGNINBUTTONHEIGHT, activebackground=BTNCLR_ON_CLICK),
+                            widget4=tk.Button(text = "Register", font=BTNFONT, bg=BTNBGCLR, width=SIGNINBUTTONWIDTH, height=SIGNINBUTTONHEIGHT, activebackground=BTNCLR_ON_CLICK)
+                          )
+    new_screen.start()
     
 
-if __name__ == "__main__":
-    MainApp().run()
-
+main_screen() 
