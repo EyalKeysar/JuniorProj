@@ -3,7 +3,7 @@ from SignInConstants import *
 from GameConstants import *
 from screen import Screen
 from windows.login_window import LoginWindow
-
+from windows.register import RegisterWindow
 
 def main_screen():
     screen = Screen()
@@ -23,7 +23,7 @@ def main_screen():
     )
     
     screen.add_widget(
-        tk.Button(text = "Register", font=BTNFONT, bg=BTNBGCLR, width=SIGNINBUTTONWIDTH, height=SIGNINBUTTONHEIGHT, activebackground=BTNCLR_ON_CLICK)
+        tk.Button(text = "Register",command=lambda: RegisterWindow(screen) , font=BTNFONT, bg=BTNBGCLR, width=SIGNINBUTTONWIDTH, height=SIGNINBUTTONHEIGHT, activebackground=BTNCLR_ON_CLICK)
     )
 
     screen.show()
