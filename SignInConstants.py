@@ -14,3 +14,13 @@ BUTTONSPADDING_Y = 10
 BTNFONT = ("Calibri", 50)
 BTNBGCLR = "#CFCFCF"
 BTNCLR_ON_CLICK = '#ABABAB'
+
+
+
+# Login -------------------------------------------------------------------------------------------------------------------------------------
+LOGIN_WINDOW_WIDTH = 300
+LOGIN_WINDOW_HEIGHT = 200
+
+LOGIN_TXT_INPUT_WIDTH = LOGIN_WINDOW_WIDTH
+LOGIN_TXT_INPUT_HEIGHT = 1
+LOGIN_TXT_FONT = ("Calibri", 20)
