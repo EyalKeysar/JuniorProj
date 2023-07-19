@@ -26,5 +26,5 @@ def main_screen():
     screen.mainloop()
     
 if __name__ == "__main__":
-    #
+    # chan
     main_screen() 
