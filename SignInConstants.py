@@ -1,4 +1,6 @@
 
+PATH_TO_DB = "./database.txt"
+
 SIGNINTITLETXT = "Sign In"
 SIGNINTITLETXTHEIGHT = 1
 SIGNINTXTFONT = ("Calibri", 100)
@@ -18,8 +20,10 @@ BTNCLR_ON_CLICK = '#ABABAB'
 # Register ----------------------------------------------------------------------------------------------------------------------------------
 
 REGISTER_WINDOW_WIDTH = 300
-REGISTER_WINDOW_HEIGHT = 300
+REGISTER_WINDOW_HEIGHT = 400
 
+INVALID_CHARACTERS = [";", "'", ":", ",", " ", "/", "\t", "\r", "\n"]
+PASSWORD_MIN_LENGTH = 5
 
 # Login -------------------------------------------------------------------------------------------------------------------------------------
 LOGIN_WINDOW_WIDTH = 300
