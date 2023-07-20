@@ -1,34 +1,40 @@
 import socket
 from Network.constants import *
 from Network.mtnp import *
+import threading
 class NetworkHandler():
     def __init__(self, logger):
         self.logger = logger
         self.client_socket = None
         self.connection_status = False
+        self.in_creation = False
         self.data_from_server = ""
+        self.CreateSocketThreaded()
         
-    def CreateSocket(self):
-        """
-            Creates a socket and connects to the server.
-            Handshake is performed.
-            
-            :Returns: socket
-        """
-        self.client_socket = socket.socket()
-        self.client_socket.settimeout(0.5)
 
-        self.client_socket = client_handshake(self.logger, self.client_socket)
+    def CreateSocketThreaded(self):
+        self.in_creation = True
+        threading.Thread(target=self.CreateSocket).start()
+    
+    def CreateSocket(self):
+        self.client_socket = client_handshake(self.logger, socket.socket().settimeout(0.5))
+        self.in_creation = False
 
     def CheckConnection(self):
+        if(self.in_creation):
+            self.connection_status = False
+            return False
+            
+        
         respond, e = client_mtn(self.logger, self.client_socket)
 
         if(respond):
             self.connection_status = True
             return True
         else:
-            self.HandelConnectionError(e)
             self.connection_status = False
+            self.HandelConnectionError(e)
+
             return False
         
     
@@ -39,8 +45,6 @@ class NetworkHandler():
             Otherwise, the error is logged.
         """
         if(e.errno == 10054 or e.errno == 10056):
-            self.logger.log(" * Server Refresh, Creating another socket")
-            self.client_socket = self.CreateSocket()
+            self.client_socket = self.CreateSocketThreaded()
         else:
-
             self.logger.log(" * Failed to send MTN request\nerrno:" + str(e.errno) + "\n" + str(e))

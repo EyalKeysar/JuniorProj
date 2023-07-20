@@ -4,7 +4,6 @@ import tkinter.messagebox
 from typing import Any
 from GameConstants import *
 from SignInConstants import *
-from screen import Screen
 
 class RegisterWindow(tk.Toplevel):
     def __init__(self, parent):
@@ -42,17 +41,5 @@ class RegisterWindow(tk.Toplevel):
         password_confirm = self.password_confirm_entry.get()
         email = self.email_entry.get()
 
-        if(not check_credential(password, password_confirm, username, email)):
-            self.password_entry.delete(0, tk.END)
-            self.password_confirm_entry.delete(0, tk.END)
-            return
         
-        respond = write_to_db(username, password, email)
-
-        if(respond):
-            tkinter.messagebox.showinfo("Success", "Account created successfully")
-            self.destroy()
-        else:
-            tkinter.messagebox.showerror("Error", "An error occured in writing to database")
-            return
 
