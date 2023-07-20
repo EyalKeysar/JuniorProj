@@ -22,9 +22,6 @@ BTNCLR_ON_CLICK = '#ABABAB'
 REGISTER_WINDOW_WIDTH = 300
 REGISTER_WINDOW_HEIGHT = 400
 
-INVALID_CHARACTERS = [";", "'", ":", ",", " ", "/", "\t", "\r", "\n"]
-PASSWORD_MIN_LENGTH = 5
-
 # Login -------------------------------------------------------------------------------------------------------------------------------------
 LOGIN_WINDOW_WIDTH = 300
 LOGIN_WINDOW_HEIGHT = 200

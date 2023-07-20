@@ -1,5 +1,6 @@
 import socket
 from Network.constants import *
+from Network.mtnp import *
 class NetworkHandler():
     def __init__(self, logger):
         self.logger = logger
@@ -14,35 +15,22 @@ class NetworkHandler():
             
             :Returns: socket
         """
-        data_from_server = ""
         self.client_socket = socket.socket()
         self.client_socket.settimeout(0.5)
 
-        if(self.data_from_server != SYN_ACK):
-            # Try to connect to the server and perform handshake.    
-            try:
-                self.client_socket.connect((SERVER_IP, SERVER_PORT))
-                self.client_socket.send(SYN_REQ.encode())
-        
-                self.data_from_server = self.client_socket.recv(1024).decode()
-                
-            except Exception as e:
-                self.logger.log(" * Failed To Create Socket \n" + str(e))
-                self.client_socket = socket.socket()
-                self.client_socket.settimeout(0.5)
+        self.client_socket = client_handshake(self.logger, self.client_socket)
 
     def CheckConnection(self):
-        """
-            Checks if the connection to the server is still alive.
-            Sends a MTN request to the server and checks the response.
-        """
-        try:
-            self.client_socket.send(MAINTAIN_CONNECTION.encode())
-            MNTN_recv = self.client_socket.recv(1024).decode()
-            self.connection_status = MNTN_recv == MAINTAIN_OK
-        except Exception as e:
+        respond, e = client_mtn(self.logger, self.client_socket)
+
+        if(respond):
+            self.connection_status = True
+            return True
+        else:
             self.HandelConnectionError(e)
             self.connection_status = False
+            return False
+        
     
     def HandelConnectionError(self, e):
         """
@@ -54,4 +42,5 @@ class NetworkHandler():
             self.logger.log(" * Server Refresh, Creating another socket")
             self.client_socket = self.CreateSocket()
         else:
+
             self.logger.log(" * Failed to send MTN request\nerrno:" + str(e.errno) + "\n" + str(e))

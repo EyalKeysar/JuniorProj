@@ -1,3 +1,4 @@
+
 SERVER_PORT = 1112
 SERVER_IP = "127.0.0.2"
 
@@ -12,3 +13,11 @@ GET_ACTIVE_PLAYERS = "GAP" # Get Active Players
 MAINTAIN_CONNECTION = "MTN" # Maintain Connection
 MAINTAIN_OK = "MTNOK" # Maintain Connection OK
 # MCP (Maintanance Connection Protocol)
+
+# database constants
+PATH_TO_DB = "./database.txt"
+PASSWORD_MIN_LENGTH = 8
+
+# Register 
+INVALID_CHARACTERS = [";", "'", ":", ",", " ", "/", "\t", "\r", "\n"]
+PASSWORD_MIN_LENGTH = 5
