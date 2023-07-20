@@ -1,71 +1,40 @@
-import pygame
-import sys
-import os
-import time
-import socket
+import tkinter as tk
+from SignInConstants import *
 from GameConstants import *
-from Network.constants import *
-from game import Game
-from draws import *
-from networks import *
+from screen import Screen
+from windows.login_window import LoginWindow
+from windows.register_window import RegisterWindow
+import time
 from logger import Logger
-from lobby_handler import LobbyHandler
+from network_handler import NetworkHandler
 
 
-def main():
-    logger =  Logger() 
-    logger.log(" * Starting game")
+def main_screen():
+    screen = Screen()
     
-    # Initializition
-    pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption(GAME_NAME)
-    clock = pygame.time.Clock()
+    screen.add_widget(
+        tk.Label(text="Disconnected", bg="#FF0000", width=SCREEN_WIDTH, height=CONNECTIONSTATUSBARHEIGHT))
+    screen.add_widget(
+        tk.Label(text = SIGNINTITLETXT, bg = TITLEBGCLR, width=SCREEN_WIDTH, height=SIGNINTITLETXTHEIGHT, font = SIGNINTXTFONT))
+    screen.add_widget(
+        tk.Button(text = "Login", command=lambda: LoginWindow(screen), font=BTNFONT, bg=BTNBGCLR, width=SIGNINBUTTONWIDTH, height=SIGNINBUTTONHEIGHT, activebackground=BTNCLR_ON_CLICK))
+    screen.add_widget(
+        tk.Button(text = "Register",command=lambda: RegisterWindow(screen) , font=BTNFONT, bg=BTNBGCLR, width=SIGNINBUTTONWIDTH, height=SIGNINBUTTONHEIGHT, activebackground=BTNCLR_ON_CLICK))
 
-    draw_opening_screen(screen, False, False)
-    
-    client_socket = CreateSocket(logger)
-            
-    logger.log("Connected to server")
+    logger = Logger()
+    network_handler = NetworkHandler(logger)
 
-    is_connected = True
     
-    while True:
-        logger.log(" * Waiting in maintenance mode")
-        try:
-            is_connected = CheckConnection(client_socket)
-        except Exception as e:
-            logger.log(" * Connection to server lost")
-            is_connected = False
-            draw_opening_screen(screen, is_connected, False)
-            client_socket = HandelConnectionError(e, logger, client_socket)
-            continue
-        
-        mouse_pos = pygame.mouse.get_pos()
-        mouse_over_start_button = mouse_pos[0] >= STARTGAME_BTN_LEFT and mouse_pos[0] <= STARTGAME_BTN_LEFT+STARTGAME_BTN_WIDTH and mouse_pos[1] >= STARTGAME_BTN_TOP and mouse_pos[1] <= STARTGAME_BTN_TOP+STARTGAME_BTN_HEIGHT
-        if(mouse_over_start_button):
-            draw_opening_screen(screen, is_connected, True)
-        else:
-            draw_opening_screen(screen, is_connected, False)
-        
-        
-        # Check for the user closing the window
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if(pygame.mouse.get_pressed()[0] == True):
-                    mouse_pos = pygame.mouse.get_pos()
-                    # Check if the user clicked on the start button, and initiate the game.
-                    mouse_over_start_button = mouse_pos[0] >= STARTGAME_BTN_LEFT and mouse_pos[0] <= STARTGAME_BTN_LEFT+STARTGAME_BTN_WIDTH and mouse_pos[1] >= STARTGAME_BTN_TOP and mouse_pos[1] <= STARTGAME_BTN_TOP+STARTGAME_BTN_HEIGHT
-                    if(mouse_over_start_button):
-                        logger.log(" * Join Lobby -----------------------------------")
-                        client_socket = LobbyHandler(screen, client_socket, logger).run()
-                        main()
-                        return
-                        
-    
+    network_handler.CreateSocket()
+
+
+    def network_check():
+        network_handler.CheckConnection()
+        screen.after(100, network_check)
+
+    screen.after(100, network_check)
+    screen.show()
+    screen.mainloop()
     
 if __name__ == "__main__":
-    main()
+    main_screen()

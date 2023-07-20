@@ -5,10 +5,14 @@ class Logger:
         self.last_msg = ""
     
     def log(self, msg):
-        if(msg != self.last_msg):
-            self.log_index += 1
-            self.last_msg = msg
-            print("Log [%d]: %s" % (self.log_index, msg))
+        # if(msg != self.last_msg):
+        #     self.log_index += 1
+        #     self.last_msg = msg
+        #     print("Log [%d]: %s" % (self.log_index, msg))
+        
+        self.log_index += 1
+        self.last_msg = msg
+        print("Log [%d]: %s" % (self.log_index, msg))
 
 
     def reset_log_index(self):

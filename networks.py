@@ -4,7 +4,6 @@ from Network.constants import *
 sys.path.append("..\\")
 from GameConstants import *
 import socket
-import pygame
 
 def CreateSocket(logger):
     """
@@ -18,13 +17,6 @@ def CreateSocket(logger):
     client_socket.settimeout(0.5)
 
     while data_from_server != SYN_ACK:
-        # Pygame maintenance
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            
         # Try to connect to the server and perform handshake.    
         try:
             client_socket.connect(("127.0.0.2", SERVER_PORT))
@@ -92,7 +84,7 @@ def get_active_players(client_socket, logger):
     num_of_players = ""
     cur_char = client_socket.recv(1).decode()
 
-    while cur_char != '=':
+    while cur_char != BETWEEN_PLAYER_LIST_CHAR:
         num_of_players += cur_char
         cur_char = client_socket.recv(1).decode()
 
@@ -101,7 +93,7 @@ def get_active_players(client_socket, logger):
     for i in range(num_of_players):
         cur_player = ""
         cur_char = client_socket.recv(1).decode()
-        while cur_char != ';':
+        while cur_char != END_PLAYER_LIST_CHAR:
             cur_player += cur_char
             cur_char = client_socket.recv(1).decode()
         players.append(cur_player)

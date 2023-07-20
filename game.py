@@ -1,7 +1,6 @@
 import pygame
 from GameConstants import *
 from GamePlayer import GamePlayer
-from Enemy import Enemy
 from Player import Player
 import sys
 
@@ -20,7 +19,6 @@ class Game:
         self.clock = pygame.time.Clock()
         
         self.player = GamePlayer(self)
-        self.enemy = Enemy(self)
         
         
     def run(self):
