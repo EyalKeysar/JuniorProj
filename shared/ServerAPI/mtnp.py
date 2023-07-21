@@ -1,8 +1,8 @@
 # Maintain Protocol.
-
-import socket
-from Network.constants import *
 import threading
+import socket
+
+from shared.ServerAPI.mtnp_constants import *
 
 def client_handshake(logger, client_socket):
 
@@ -10,17 +10,21 @@ def client_handshake(logger, client_socket):
     while(data_from_server != SYN_ACK):
         # Try to connect to the server and perform handshake.    
         try:
+            logger.log(" * Trying to connect to server...")
             client_socket.connect((SERVER_IP, SERVER_PORT))
             client_socket.send(SYN_REQ.encode())
+            logger.log(" * Sent SYN request to server")
     
             data_from_server = client_socket.recv(1024).decode()
+            logger.log(f" * Received {data_from_server} from server")
             
         except Exception as e:
             logger.log(" * Failed To Create Socket \n" + str(e))
             client_socket = socket.socket()
             client_socket.settimeout(0.5)
             continue
-
+    
+    logger.log(" * Handshake completed successfully")
     return client_socket
 
 def server_handshake(client, logger, address, client_list, threads_list):
@@ -41,7 +45,8 @@ def server_handshake(client, logger, address, client_list, threads_list):
             # If handshake failed, close connection.
             timeout += 1
             if(timeout > 10):
-                client_list.remove(address[0])
+                if(address[0] in client_list):
+                    client_list.remove(address[0])
                 client.close()
                 return
     

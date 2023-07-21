@@ -4,12 +4,11 @@ import time
 import sys
 import os
 import random
-from constants import *
-sys.path.append('../')
-from networks import *
-from logger import Logger
-from server_network_handler import ServerNetworkHandler
 
+from server.server_network_handler import ServerNetworkHandler
+
+from shared.logger import Logger
+from shared.ServerAPI.mtnp_constants import *
 
 class Server:
     def __init__(self, port=SERVER_PORT):

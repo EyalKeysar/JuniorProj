@@ -6,7 +6,7 @@ from client.GUI.windows.register_window import RegisterWindow
 from client.GUI.windows.main_window import MainWindow
 import time
 import threading
-from client.logger import Logger
+from shared.logger import Logger
 import sys
 
 
@@ -21,19 +21,25 @@ def main_screen():
 
     serverAPI = ServerAPI(logger)
 
-    root.after(100, ServerAPI.Build)
+    root.after(100, serverAPI.Build)
+
+    root.after(300, update, root, serverAPI)
+    root.after(400, update_status_bar, root, main_window, serverAPI)
 
     root.mainloop()
     sys.exit()
 
 def update(root, serverAPI):
-    
-    update_status_bar(serverAPI.CheckConnection())
-
+    serverAPI.CheckConnection()
     root.after(100, update, root, serverAPI)
 
-def update_status_bar(main_window, is_connected):
-    main_window.connection_status_label.color = "#00FF00" if is_connected else "#FF0000"
+def update_status_bar(root, main_window, serverAPI):
+    print(serverAPI.GetConnectionStatus())
+    main_window.connection_status_label.config(bg="#00FF00" if serverAPI.GetConnectionStatus() else "#FF0000")
+    main_window.connection_status_label.config(text="Connected" if serverAPI.GetConnectionStatus() else "Disconnected")
+    main_window.connection_status_label.update()
+    main_window.update()
+    root.after(100, update_status_bar, root, main_window, serverAPI)
 
 
 if __name__ == "__main__":

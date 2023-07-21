@@ -11,7 +11,6 @@ class NetworkHandler():
         self.connection_status = False
         self.in_creation = False
         self.data_from_server = ""
-        self.CreateSocketThreaded()
         
 
     def CreateSocketThreaded(self):
@@ -19,10 +18,13 @@ class NetworkHandler():
         threading.Thread(target=self.CreateSocket).start()
     
     def CreateSocket(self):
-        self.client_socket = client_handshake(self.logger, socket.socket().settimeout(0.5))
+        self.client_socket = socket.socket()
+        self.client_socket.settimeout(0.5)
+        self.client_socket = client_handshake(self.logger, self.client_socket)
         self.in_creation = False
 
     def CheckConnection(self):
+        self.logger.log(" * Checking connection...")
         if(self.in_creation):
             self.connection_status = False
             return False
@@ -31,9 +33,11 @@ class NetworkHandler():
         respond, e = client_mtn(self.logger, self.client_socket)
 
         if(respond):
+            self.logger.log(" * Connection is alive")
             self.connection_status = True
             return True
         else:
+            self.logger.log(" * Failed to send MTN request\nerrno:" + str(e.errno))
             self.connection_status = False
             self.HandelConnectionError(e)
 

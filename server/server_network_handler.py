@@ -1,7 +1,7 @@
 import socket
-from constants import *
+from server.constants import *
 import threading
-from mtnp import *
+from shared.ServerAPI.mtnp import *
 
 class ServerNetworkHandler:
     def __init__(self, logger, client_list):

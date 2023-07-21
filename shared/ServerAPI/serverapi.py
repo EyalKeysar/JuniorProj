@@ -10,8 +10,11 @@ class ServerAPI:
         self.network_handler.CreateSocketThreaded()
 
     def CheckConnection(self):
-        pass
+        self.network_handler.CheckConnection()
     
+    def GetConnectionStatus(self):
+        return self.network_handler.connection_status
+
     def Destroy(self):
         pass
 
