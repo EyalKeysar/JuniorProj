@@ -2,7 +2,7 @@
 import threading
 import socket
 
-from shared.ServerAPI.mtnp_constants import *
+from shared.ServerAPI.api_constants import *
 
 def client_handshake(logger, client_socket):
 

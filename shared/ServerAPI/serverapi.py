@@ -1,15 +1,19 @@
+import threading
 from shared.ServerAPI.network_handler import NetworkHandler
 
 class ServerAPI:
     def __init__(self, logger) -> None:
         self.logger = logger
         self.network_handler = NetworkHandler(self.logger)
+        self.connecting = False
 
     # General
     def Build(self):
         self.network_handler.CreateSocketThreaded()
 
     def CheckConnection(self):
+        if(self.network_handler.in_creation):
+            return False
         self.network_handler.CheckConnection()
     
     def GetConnectionStatus(self):
