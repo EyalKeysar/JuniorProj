@@ -1,3 +1,4 @@
+
 import threading
 from shared.ServerAPI.network_handler import NetworkHandler
 
@@ -5,7 +6,7 @@ class ServerAPI:
     def __init__(self, logger) -> None:
         self.logger = logger
         self.network_handler = NetworkHandler(self.logger)
-        self.connecting = False
+        self.is_authenticated = False
 
     # General
     def Build(self):
@@ -14,7 +15,19 @@ class ServerAPI:
     def CheckConnection(self):
         if(self.network_handler.in_creation):
             return False
-        self.network_handler.CheckConnection()
+        
+        respond, e = self.network_handler.CheckConnection()
+        if(respond):
+            self.logger.log(" * Connection is alive")
+            self.network_handler.connection_status = True
+            
+        else:
+            self.logger.log(" * Failed to send MTN request\nerrno:" + str(e.errno))
+            self.network_handler.connection_status = False
+            self.network_handler.HandelConnectionError(e)
+
+            return False
+
     
     def GetConnectionStatus(self):
         return self.network_handler.connection_status
@@ -23,11 +36,16 @@ class ServerAPI:
         pass
 
     # Sign in
-    def Login(self, username, password):
+    def Login(self, username, password) -> bool:
         pass
 
     def Register(self, username, password, mail):
         pass
+
+    def IsAuthenticated(self):
+        respond = self.network_handler.IsAuthenticated()
+        self.is_authenticated = respond
+        return respond
 
     # Lobby
     def GetRooms(self):

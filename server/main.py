@@ -22,7 +22,7 @@ class Server:
                 accept_thread = threading.Thread(target=self.network_handler.run)
                 accept_thread.start()
             self.handle_clients()
-
+            # print("c l = " + str(self.network_handler.client_list))
     
     def handle_clients(self):
 
@@ -50,6 +50,13 @@ class Server:
             else:
                 data = data.decode()
                 server_mtn(data, client, self.logger)
+                
+                if(data == AUTH_REQUEST):
+                    return self.is_authenticated(client)
+                
+    def is_authenticated(self, client):
+        client.send(AUTH_TRUE.encode())
+        return True
     
 
 Server().run()

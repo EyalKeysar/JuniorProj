@@ -12,7 +12,6 @@ class NetworkHandler():
         self.in_creation = False
         self.data_from_server = ""
         
-
     def CreateSocketThreaded(self):
         self.in_creation = True
         threading.Thread(target=self.CreateSocket).start()
@@ -24,24 +23,26 @@ class NetworkHandler():
         self.in_creation = False
 
     def CheckConnection(self):
-        self.logger.log(" * Checking connection...")
         if(self.in_creation):
             self.connection_status = False
-            return False
+            return False, None
             
-        
         respond, e = client_mtn(self.logger, self.client_socket)
 
-        if(respond):
-            self.logger.log(" * Connection is alive")
-            self.connection_status = True
-            return True
-        else:
-            self.logger.log(" * Failed to send MTN request\nerrno:" + str(e.errno))
-            self.connection_status = False
-            self.HandelConnectionError(e)
-
+        return respond, e
+    
+    def IsAuthenticated(self):
+        if(self.in_creation):
             return False
+        
+        try:
+            self.client_socket.send(AUTH_REQUEST.encode())
+            respond = self.client_socket.recv(1024).decode()
+            return respond == AUTH_TRUE
+        except Exception as e:
+            self.HandelConnectionError(e)
+            return False
+        
         
     
     def HandelConnectionError(self, e):

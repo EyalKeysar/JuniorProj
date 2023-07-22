@@ -20,3 +20,8 @@ PASSWORD_MIN_LENGTH = 8
 # Register 
 INVALID_CHARACTERS = [";", "'", ":", ",", " ", "/", "\t", "\r", "\n"]
 PASSWORD_MIN_LENGTH = 5
+
+
+AUTH_REQUEST = "AUTHREQ"
+AUTH_TRUE = "AUTHTRUE"
+AUTH_FALSE = "AUTHFALSE"

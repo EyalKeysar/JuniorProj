@@ -3,7 +3,7 @@ import tkinter as tk
 import tkinter.messagebox
 from typing import Any
 from client.GameConstants import *
-from client.GUI.windows.SignInConstants import *
+from client.GUI.windows.windsows_constants import *
 
 class RegisterWindow(tk.Toplevel):
     def __init__(self, parent):

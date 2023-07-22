@@ -1,6 +1,6 @@
 import tkinter as tk
 from client.GameConstants import *
-from client.GUI.windows.SignInConstants import *
+from client.GUI.windows.windsows_constants import *
 
 class LoginWindow(tk.Toplevel):
     def __init__(self, parent):
