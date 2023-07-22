@@ -34,14 +34,41 @@ class NetworkHandler():
     def IsAuthenticated(self):
         if(self.in_creation):
             return False
-        
         try:
             self.client_socket.send(AUTH_REQUEST.encode())
             respond = self.client_socket.recv(1024).decode()
             return respond == AUTH_TRUE
+        
         except Exception as e:
             self.HandelConnectionError(e)
             return False
+    
+    def MovePlayerLeft(self):
+        if(self.in_creation):
+            return False
+        try:
+            self.client_socket.send(MOVE_LEFT.encode())
+            respond = self.client_socket.recv(1024).decode()
+            return respond
+        
+        except Exception as e:
+            self.HandelConnectionError(e)
+            return False
+    
+    def MovePlayerRight(self):
+        if(self.in_creation):
+            return False
+        try:
+            self.client_socket.send(MOVE_RIGHT.encode())
+            respond = self.client_socket.recv(1024).decode()
+            return respond
+        
+        except Exception as e:
+            self.HandelConnectionError(e)
+            return False
+    
+
+
         
         
     

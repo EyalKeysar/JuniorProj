@@ -1,6 +1,7 @@
 
 import threading
 from shared.ServerAPI.network_handler import NetworkHandler
+from shared.ServerAPI.api_constants import *
 
 class ServerAPI:
     def __init__(self, logger) -> None:
@@ -18,9 +19,7 @@ class ServerAPI:
         
         respond, e = self.network_handler.CheckConnection()
         if(respond):
-            self.logger.log(" * Connection is alive")
             self.network_handler.connection_status = True
-            
         else:
             self.logger.log(" * Failed to send MTN request\nerrno:" + str(e.errno))
             self.network_handler.connection_status = False
@@ -60,3 +59,27 @@ class ServerAPI:
     # Game
     def UpdateGame(self):
         pass
+    def MovePlayerLeft(self):
+        respond =  self.network_handler.MovePlayerLeft()
+        
+        if(respond == MOVE_FALSE):
+            return False
+        else:
+            pos = respond.split(",")
+            return [int(pos[0]), int(pos[1])]
+        
+    
+    def MovePlayerRight(self):
+        respond = self.network_handler.MovePlayerRight()
+
+        if(respond == MOVE_FALSE):
+            return False
+        else:
+            pos = respond.split(",")
+            return [int(pos[0]), int(pos[1])]
+
+    def Shoot(self):
+        pass
+    def Sheild(self):
+        pass
+

@@ -60,6 +60,5 @@ def client_mtn(logger, client_socket):
         return False, e
 
 
-def server_mtn(data, client, logger):
-    if(data == MAINTAIN_CONNECTION):
-        client.send(MAINTAIN_OK.encode())
+def server_mtn(client):
+    pass

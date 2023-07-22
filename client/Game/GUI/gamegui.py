@@ -1,45 +1,35 @@
 import pygame
+
 from client.Game.GUI.pygame_constants import *
+from client.Game.GUI.simplegui import draw_cell_by_grid
 
-class GameGui():
+class GameGUI:
     def __init__(self):
-        # pygame init
+        pygame.init()
+        self.pygame = pygame
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+        pygame.display.set_caption("Space Invaders")
         self.clock = pygame.time.Clock()
+        self.is_running = True
+        self.events =[]
+    
+    def draw_grid(self):
+        for i in range(GRID_SIZE):
+            for j in range(GRID_SIZE):
+                draw_cell_by_grid(self.screen, (i, j), CELL_COLOR)
 
-    def update(self, grid):
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                return
-
-        self.draw_grid(grid)
+    def update(self):
+        
         pygame.display.update()
 
+        self.events = []
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.is_running = False
+            if(event.type == pygame.KEYDOWN):
+                self.events.append(event.key)
 
-    def draw_grid(self, grid):
-        self.screen.fill(BG_COLOR)
-        # Clear the surface
         
-        # Iterate over the grid and draw cubes
-        for y in range(len(grid)):
-            for x in range(len(grid)):
-                # Get the color of the current cell=
-                # Draw the cube
-                self.draw_cell_by_grid(x, y, CELL_COLOR, self.screen)
 
-        # Update the display
-        pygame.display.flip()
-
-    def draw_cell_by_grid(self, x, y, color, surface):
-        pygame.draw.rect(surface, color, (x * (CELL_SIZE + LINE_WIDTH) + PAD_LEFT, y * (CELL_SIZE + LINE_WIDTH) + PAD_TOP, CELL_SIZE, CELL_SIZE))
-
-
-
-
-if __name__ == "__main__":
-    g = GameGui()
-    grid = [[0 for i in range(GRID_SIZE)] for j in range(GRID_SIZE)]
-    while True:
-        g.update(grid)
+    def getEvents(self):
+        return pygame.event.get()

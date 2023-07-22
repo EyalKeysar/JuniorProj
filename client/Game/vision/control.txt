@@ -1,0 +1,9 @@
+Game Controls Vision
+
+left arrow = move left
+right arrow = move right
+
+down arrow = temp shield?
+up arrow = shoot?
+x = summon monster?
+y = summon box?

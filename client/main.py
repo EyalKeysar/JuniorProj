@@ -9,7 +9,7 @@ from client.GameConstants import *
 from client.GUI.windows.login_window import LoginWindow
 from client.GUI.windows.register_window import RegisterWindow
 from client.GUI.windows.main_window import MainWindow
-from client.GUI.windows.lobby_window import LobbtWindow
+from client.GUI.windows.lobby_window import LobbyWindow
 from client.window_handler import WindowHandler
 
 from shared.logger import Logger
@@ -24,10 +24,10 @@ def update(root, window_manager, serverAPI):
         if(type(window_manager.GetCurWindow()) != MainWindow):
             window_manager.ChangeWindow(MainWindow)
     
-    if(serverAPI.IsAuthenticated() and type(window_manager.GetCurWindow()) == MainWindow):
-        window_manager.ChangeWindow(LobbtWindow)
 
-    root.after(100, update, root, serverAPI)
+    root.after(100, update, root, window_manager, serverAPI)
+
+    
 
 def update_status_bar(root, window_handler, serverAPI):
     window_handler.GetCurWindow().connection_status_label.config(
@@ -50,7 +50,7 @@ def run():
     serverAPI = ServerAPI(logger)
 
     root.after(100, serverAPI.Build)
-    root.after(300, update, root, serverAPI)
+    root.after(300, update, root, window_handler, serverAPI)
     root.after(400, update_status_bar, root, window_handler, serverAPI)
 
     root.mainloop()
