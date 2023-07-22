@@ -62,7 +62,7 @@ class ServerAPI:
     def MovePlayerLeft(self):
         respond =  self.network_handler.MovePlayerLeft()
         
-        if(respond == MOVE_FALSE):
+        if(respond == False):
             return False
         else:
             pos = respond.split(",")
@@ -72,7 +72,7 @@ class ServerAPI:
     def MovePlayerRight(self):
         respond = self.network_handler.MovePlayerRight()
 
-        if(respond == MOVE_FALSE):
+        if(respond == False):
             return False
         else:
             pos = respond.split(",")

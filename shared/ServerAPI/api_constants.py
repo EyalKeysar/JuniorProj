@@ -1,5 +1,5 @@
 SERVER_PORT = 1112
-SERVER_IP = "127.0.0.2"
+SERVER_IP = "10.0.0.21"
 
 
 # Connection Protocol

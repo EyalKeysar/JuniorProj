@@ -1,5 +1,6 @@
 import pygame
 from client.Game.GUI.pygame_constants import *
+from shared.game_constants import *
 
 def draw_cell_by_grid(screen, grid, color):
     x = grid[0] * (CELL_SIZE + LINE_WIDTH) + PAD_LEFT

@@ -12,6 +12,8 @@ from client.GUI.windows.main_window import MainWindow
 from client.GUI.windows.lobby_window import LobbyWindow
 from client.window_handler import WindowHandler
 
+from client.Game.game import Game
+
 from shared.logger import Logger
 from shared.ServerAPI.server_api import ServerAPI 
 
@@ -43,15 +45,22 @@ def run():
     root = tk.Tk()
     root.withdraw() # hide the main window
     window_handler = WindowHandler(root) # create the window handler
-    window_handler.ChangeWindow(MainWindow) # show the main window
+    # window_handler.ChangeWindow(MainWindow) # show the main window
 
     logger = Logger()
 
     serverAPI = ServerAPI(logger)
 
+    serverAPI.Build()
+
+    game = Game(serverAPI)
+
+    game.run()
+
     root.after(100, serverAPI.Build)
-    root.after(300, update, root, window_handler, serverAPI)
-    root.after(400, update_status_bar, root, window_handler, serverAPI)
+    root.after(200, game.run)
+    # root.after(300, update, root, window_handler, serverAPI)
+    # root.after(150, update_status_bar, root, window_handler, serverAPI)
 
     root.mainloop()
     

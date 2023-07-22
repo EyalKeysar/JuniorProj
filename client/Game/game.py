@@ -5,6 +5,7 @@ from client.Game.GUI.gamegui import GameGUI
 from client.Game.GUI.player import Player
 
 from client.Game.GUI.pygame_constants import *
+from shared.game_constants import *
 
 class Game:
     def __init__(self, serverAPI):
@@ -21,8 +22,6 @@ class Game:
     def run(self):
         while self.gui.is_running:
 
-            self.logic_handler.HandleEvents( self.gui.getEvents())
-
             self.gui.draw_grid()
 
             for player in self.players:
@@ -31,10 +30,13 @@ class Game:
             self.gui.update()
             for key in self.gui.events:
                 if(key == pygame.K_LEFT):
-                    print("left")
-                    self.serverAPI.MovePlayerLeft()
+                    respond = self.serverAPI.MovePlayerLeft()
+                    if(respond != False):
+                        self.players[0].pos = respond
                 if(key == pygame.K_RIGHT):
-                    self.serverAPI.MovePlayerRight()
+                    respond = self.serverAPI.MovePlayerRight()
+                    if(respond != False):
+                        self.players[0].pos = respond
                 if(key == pygame.K_UP):
                     self.serverAPI.Shoot()
                 if(key == pygame.K_DOWN):

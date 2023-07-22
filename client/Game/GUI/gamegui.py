@@ -1,6 +1,7 @@
 import pygame
 
 from client.Game.GUI.pygame_constants import *
+from shared.game_constants import *
 from client.Game.GUI.simplegui import draw_cell_by_grid
 
 class GameGUI:
@@ -22,12 +23,14 @@ class GameGUI:
         
         pygame.display.update()
 
-        self.events = []
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.is_running = False
             if(event.type == pygame.KEYDOWN):
                 self.events.append(event.key)
+            if(event.type == pygame.KEYUP):
+                if(event.key in self.events):
+                    self.events.remove(event.key)
 
         
 

@@ -2,6 +2,7 @@ import pygame
 
 from client.Game.GUI.simplegui import draw_cell_by_grid
 from client.Game.GUI.pygame_constants import *
+from shared.game_constants import *
 
 class Player:
     def __init__(self):
