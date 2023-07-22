@@ -68,7 +68,7 @@ class Server:
         return True
     
     def handle_error(self, e, client, address):
-        print("in error")
+        print("in error " + str(e))
         if(e.errno == 10038):
             data = None
         elif(e.errno == 10054 or e.errno == 10056):
