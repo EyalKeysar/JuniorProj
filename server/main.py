@@ -20,11 +20,13 @@ class Server:
         self.logger = Logger()
         self.network_handler = ServerNetworkHandler(self.logger)
         self.player = Player([10, 100])
+        
         self.game_logic = GameLogic()
         
 
     def run(self):
         while True:
+            print(self.network_handler.client_list)
             if(not self.network_handler.waiting_for_clients):
                 accept_thread = threading.Thread(target=self.network_handler.run)
                 accept_thread.start()
@@ -78,5 +80,4 @@ class Server:
             return
         else:
             raise e
-
 Server().run()

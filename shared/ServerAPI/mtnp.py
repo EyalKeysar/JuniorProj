@@ -24,7 +24,7 @@ def client_handshake(logger, client_socket):
     logger.log(" * Handshake completed successfully")
     return client_socket
 
-def server_handshake(client, logger, address, client_list, threads_list):
+def server_handshake(client, logger, address, client_list):
     timeout = 0
     handshake_data = ""
     # Wait for handshake from client.

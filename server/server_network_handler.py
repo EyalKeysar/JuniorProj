@@ -10,8 +10,6 @@ class ServerNetworkHandler:
 
         self.waiting_for_clients = False
 
-        self.threads_list = []
-
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.bind(('', SERVER_PORT))
 
@@ -28,7 +26,7 @@ class ServerNetworkHandler:
             self.waiting_for_clients = False
             return None, None
 
-        server_handshake(client, self.logger, address, self.client_list, self.threads_list)
+        server_handshake(client, self.logger, address, self.client_list)
         
         
         self.logger.log(" * Client connected from %s:%d" % (address[0], address[1]))
