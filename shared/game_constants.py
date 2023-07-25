@@ -6,7 +6,7 @@ PLAYER_SPRITE = [ # unecessary, but it's here because i want it to be in same fi
             0, 0, 1, 1, 0, 1, 1, 0, 0,
             0, 1, 1, 1, 1, 1, 1, 1, 0,
             0, 1, 1, 1, 1, 1, 1, 1, 0,
-            1, 1, 1, 0, 0, 0, 1, 1, 1,
+            1, 1, 1, 0, 1, 0, 1, 1, 1,
             1, 1, 0, 0, 0, 0, 0, 1, 1,
         ]
 PLAYER_SPRITE_SIZE = (9, 9)

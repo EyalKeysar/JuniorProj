@@ -17,6 +17,8 @@ MAINTAIN_OK = "MTNOK" # Maintain Connection OK
 PATH_TO_DB = "./database.txt"
 PASSWORD_MIN_LENGTH = 8
 
+PLAYER_START_POS = [10, 100]
+
 # Register 
 INVALID_CHARACTERS = [";", "'", ":", ",", " ", "/", "\t", "\r", "\n"]
 PASSWORD_MIN_LENGTH = 5

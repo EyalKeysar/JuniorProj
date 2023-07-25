@@ -22,7 +22,7 @@ class Server:
         self.network_handler = ServerNetworkHandler()
 
 
-        self.player = Player([10, 100])
+        self.player = Player(PLAYER_START_POS)
 
         self.client_list = []
 
@@ -31,7 +31,8 @@ class Server:
 
     def run(self):
         while True:
-            print(self.client_list)
+            if(len(self.client_list) != 0):
+                print(self.client_list)
             if(not self.network_handler.waiting_for_clients):
                 accept_thread = threading.Thread(target=self.network_handler.run, args=(self.client_list,))
                 

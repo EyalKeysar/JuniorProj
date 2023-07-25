@@ -3,6 +3,7 @@ from server.constants import *
 import threading
 from shared.ServerAPI.mtnp import *
 from server.client import Client
+import sys
 
 class ServerNetworkHandler:
     def __init__(self):

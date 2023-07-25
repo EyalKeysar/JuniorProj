@@ -5,8 +5,8 @@ from client.Game.GUI.pygame_constants import *
 from shared.game_constants import *
 
 class Player:
-    def __init__(self):
-        self.pos = [70, 70]
+    def __init__(self, pos):
+        self.pos = pos
         self.sprite = PLAYER_SPRITE
         self.sprite_size = PLAYER_SPRITE_SIZE
 
@@ -17,4 +17,4 @@ class Player:
         for i in range(self.sprite_size[1]):
             for j in range(self.sprite_size[0]):
                 if self.sprite[i*self.sprite_size[0] + j] == 1:
-                    draw_cell_by_grid(screen, (start_x + j, start_y + i), (255, 0, 255))
+                    draw_cell_by_grid(screen, (start_x + j, start_y + i), PLAYER_1_COLOR)

@@ -14,7 +14,7 @@ TEXT_FONT = "freesansbold.ttf"
 TITLE_TXT_SIZE = 100
 TITLE_TXT_CLR = (255, 255, 255)
 
-PURPLE_COLOR = (106, 13, 173)
+PURPLE_COLOR = (201, 27, 14)
 
 GAME_NAME = "Space Invaders"
 LOBBY_TITLE = "Lobby"

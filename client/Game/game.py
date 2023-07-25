@@ -6,6 +6,8 @@ from client.Game.GUI.player import Player
 
 from client.Game.GUI.pygame_constants import *
 from shared.game_constants import *
+from shared.ServerAPI.api_constants import *
+
 
 class Game:
     def __init__(self, serverAPI):
@@ -13,7 +15,8 @@ class Game:
         self.gui = GameGUI()
 
         self.players = []
-        self.players.append(Player())
+        self.players.append(Player(PLAYER_START_POS))
+        self.players.append(Player(PLAYER_START_POS))
 
     def get_players(self, serverAPI):
         self.players = serverAPI.GetPlayers()
