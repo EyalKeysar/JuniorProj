@@ -2,38 +2,43 @@ import socket
 from server.constants import *
 import threading
 from shared.ServerAPI.mtnp import *
+from server.client import Client
 
 class ServerNetworkHandler:
-    def __init__(self, logger):
-        self.logger = logger
-        self.client_list = []
+    def __init__(self):
 
         self.waiting_for_clients = False
 
+        # Socket server setup
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.bind(('', SERVER_PORT))
 
 
 
-    def run(self):
-        self.waiting_for_clients = True
-        self.server_socket.listen(1)
+    def run(self, client_list):
+        self.waiting_for_clients = True # Activate Flag So No Other Thread Can Run This Method until this one is done
         
-        client, address = self.server_socket.accept()
-        if((client, address) in self.client_list):
-            self.client_list.remove((client, address))
-            client.close()
-            self.waiting_for_clients = False
-            return None, None
+        sys.exit()
+        self.server_socket.listen(1) # Listen for clients (blocking)
 
-        server_handshake(client, self.logger, address, self.client_list)
-        
-        
-        self.logger.log(" * Client connected from %s:%d" % (address[0], address[1]))
-        self.client_list.append((client, address))
-        self.waiting_for_clients = False
+        client_socket, address = self.server_socket.accept()
 
-        return client, address
+        for client in client_list:
+            if(client.GetAddress()[0] == address[0]):
+                # update client socket and port
+                client.SetSocket(client_socket)
+                client.SetAddress(address)
+                server_handshake(client_socket, address, self.client_list)
+                return
+
+
+        server_handshake(client_socket, address, self.client_list)
+        
+        new_client = Client(client_socket, address)
+
+        client_list.append((client, address))
+
+        self.waiting_for_clients = False # Deactivate Flag
 
                 
     def kill(self):
@@ -43,4 +48,3 @@ class ServerNetworkHandler:
             client.close()
 
         self.server_socket.close()
-        self.logger.log(" * Server stopped running")

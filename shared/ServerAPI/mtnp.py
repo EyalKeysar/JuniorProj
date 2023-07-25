@@ -24,7 +24,7 @@ def client_handshake(logger, client_socket):
     logger.log(" * Handshake completed successfully")
     return client_socket
 
-def server_handshake(client, logger, address, client_list):
+def server_handshake(client, clients_list):
     timeout = 0
     handshake_data = ""
     # Wait for handshake from client.
@@ -39,10 +39,12 @@ def server_handshake(client, logger, address, client_list):
             print(e)
             timeout += 1
             if(timeout > 10):
-                if(address[0] in client_list):
-                    client_list.remove(address[0])
+                print("timeout for SYN " + str(client.GetAddress()))
+                remove_client(client, clients_list)
                 client.close()
+
                 return
+            continue
 
 
 
@@ -62,3 +64,10 @@ def client_mtn(logger, client_socket):
 
 def server_mtn(client):
     pass
+
+
+def remove_client(client, clients_list):
+    for client in clients_list:
+        if(client.GetAddress()[0] == client.GetAddress()[0]):
+            clients_list.remove(client)
+            return

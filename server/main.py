@@ -8,6 +8,7 @@ import random
 from server.server_network_handler import ServerNetworkHandler
 from server.Game.player import Player
 from server.Game.game_logic import GameLogic
+from server.client import Client
 
 from shared.logger import Logger
 from shared.ServerAPI.api_constants import *
@@ -18,28 +19,36 @@ from shared.game_constants import *
 class Server:
     def __init__(self, port=SERVER_PORT):
         self.logger = Logger()
-        self.network_handler = ServerNetworkHandler(self.logger)
+        self.network_handler = ServerNetworkHandler()
+
+
         self.player = Player([10, 100])
-        
+
+        self.client_list = []
+
         self.game_logic = GameLogic()
-        
+
 
     def run(self):
         while True:
-            print(self.network_handler.client_list)
+            print(self.client_list)
             if(not self.network_handler.waiting_for_clients):
-                accept_thread = threading.Thread(target=self.network_handler.run)
+                accept_thread = threading.Thread(target=self.network_handler.run, args=(self.client_list,))
+                
                 accept_thread.start()
+            
             self.handle_clients()
+        
     
     def handle_clients(self):
-        for (client, address) in self.network_handler.client_list:
+        for client in self.client_list:
             try:
                 data = client.recv(1024)
             except Exception as e:
-                self.handle_error(e, client, address)
-                if((client, address) in self.network_handler.client_list):
-                    self.network_handler.client_list.remove((client, address))  
+                self.handle_error(e, client)
+                for current_client in self.client_list:
+                    if(current_client.GetAddress[0] == client.GetAddress[0]):
+                        self.client_list.remove(current_client)
                 client.close()
                 continue
             
@@ -66,17 +75,19 @@ class Server:
                 
                 
     def is_authenticated(self, client):
-        client.send(AUTH_TRUE.encode())
+        client.GetSocket().send(AUTH_TRUE.encode())
         return True
     
-    def handle_error(self, e, client, address):
+    def handle_error(self, e, client):
         print("in error " + str(e))
         if(e.errno == 10038):
             data = None
         elif(e.errno == 10054 or e.errno == 10056):
-            if((client, address) in self.network_handler.client_list):
-                self.network_handler.client_list.remove((client, address))
+            for current_client in self.client_list:
+                if(current_client.GetAddress[0] == client.GetAddress[0]):
+                    self.client_list.remove(current_client)
             client.close()
+
             return
         else:
             raise e

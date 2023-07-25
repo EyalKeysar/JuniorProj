@@ -79,7 +79,15 @@ class ServerAPI:
             return [int(pos[0]), int(pos[1])]
 
     def Shoot(self):
-        pass
+        respond = self.network_handler.Shoot()
+
+        if(respond == False):
+            return False
+        else:
+            
+
+
+
     def Sheild(self):
         pass
 
