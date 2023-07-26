@@ -30,10 +30,10 @@ def server_handshake(client, clients_list):
     # Wait for handshake from client.
     while handshake_data != SYN_REQ:
         try:
-            handshake_data = client.recv(1024).decode()
+            handshake_data = client.GetSocket().recv(1024).decode()
             if(handshake_data != SYN_REQ):
                 raise ConnectionError
-            client.send(SYN_ACK.encode())
+            client.GetSocket().send(SYN_ACK.encode())
 
         except Exception as e:
             print(e)
@@ -41,7 +41,9 @@ def server_handshake(client, clients_list):
             if(timeout > 10):
                 print("timeout for SYN " + str(client.GetAddress()))
                 remove_client(client, clients_list)
-                client.close()
+                client.GetSocket().close()
+
+                remove_client(client, clients_list)
 
                 return
             continue

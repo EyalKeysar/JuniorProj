@@ -18,26 +18,27 @@ class ServerNetworkHandler:
 
     def run(self, client_list):
         self.waiting_for_clients = True # Activate Flag So No Other Thread Can Run This Method until this one is done
-        
-        sys.exit()
+
         self.server_socket.listen(1) # Listen for clients (blocking)
 
         client_socket, address = self.server_socket.accept()
 
+        cur_client = Client(client_socket, address)
+
         for client in client_list:
-            if(client.GetAddress()[0] == address[0]):
+            if(client.GetAddress()[0] == cur_client.GetAddress()[0]):
                 # update client socket and port
                 client.SetSocket(client_socket)
                 client.SetAddress(address)
-                server_handshake(client_socket, address, self.client_list)
+                server_handshake(client, client_list)
+                client_list.append(client)
+
                 return
 
 
-        server_handshake(client_socket, address, self.client_list)
-        
-        new_client = Client(client_socket, address)
+        server_handshake(cur_client, client_list)
 
-        client_list.append((client, address))
+        client_list.append(cur_client)
 
         self.waiting_for_clients = False # Deactivate Flag
 

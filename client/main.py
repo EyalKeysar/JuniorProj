@@ -22,10 +22,12 @@ from shared.ServerAPI.server_api import ServerAPI
 def update(root, window_manager, serverAPI):
 
     # if the server is not connected, change the window to the main window
-    if(not serverAPI.CheckConnection()):
-        if(type(window_manager.GetCurWindow()) != MainWindow):
-            window_manager.ChangeWindow(MainWindow)
+
+    # if(not serverAPI.CheckConnection()):
+    #     if(type(window_manager.GetCurWindow()) != MainWindow):
+    #         window_manager.ChangeWindow(MainWindow)
     
+    serverAPI.CheckConnection()
 
     root.after(100, update, root, window_manager, serverAPI)
 
@@ -59,7 +61,7 @@ def run():
 
     root.after(100, serverAPI.Build)
     root.after(200, game.run)
-    # root.after(300, update, root, window_handler, serverAPI)
+    root.after(300, update, root, None, serverAPI)
     # root.after(150, update_status_bar, root, window_handler, serverAPI)
 
     root.mainloop()

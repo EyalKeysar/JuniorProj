@@ -44,13 +44,13 @@ class Server:
     def handle_clients(self):
         for client in self.client_list:
             try:
-                data = client.recv(1024)
+                data = client.GetSocket().recv(1024)
             except Exception as e:
                 self.handle_error(e, client)
                 for current_client in self.client_list:
                     if(current_client.GetAddress[0] == client.GetAddress[0]):
                         self.client_list.remove(current_client)
-                client.close()
+                client.GetSocket().close()
                 continue
             
             data = data.decode()
@@ -59,6 +59,7 @@ class Server:
 
             # network
             if(data == MAINTAIN_CONNECTION):
+                print("maintain connection $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ ")
                 client.send(MAINTAIN_OK.encode())
             if(data == AUTH_REQUEST):
                 pass
@@ -68,11 +69,11 @@ class Server:
             if(data == MOVE_LEFT):
                 respond = self.game_logic.move_player_left(self.player)
                 if(respond):
-                    client.send((str(self.player.pos[0]) + ',' + str(self.player.pos[1])).encode())
+                    client.GetSocket().send((str(self.player.pos[0]) + ',' + str(self.player.pos[1])).encode())
             if(data == MOVE_RIGHT):
                 respond = self.game_logic.move_player_right(self.player)
                 if(respond):
-                    client.send((str(self.player.pos[0]) + ',' + str(self.player.pos[1])).encode())
+                    client.GetSocket().send((str(self.player.pos[0]) + ',' + str(self.player.pos[1])).encode())
                 
                 
     def is_authenticated(self, client):
