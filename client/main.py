@@ -35,8 +35,8 @@ def update(root, window_manager, serverAPI):
 
 def update_status_bar(root, window_handler, serverAPI):
     window_handler.GetCurWindow().connection_status_label.config(
-        bg="#00FF00" if serverAPI.GetConnectionStatus() else "#FF0000", 
-        text="Connected" if serverAPI.GetConnectionStatus() else "Disconnected"
+        bg= STATUS_BAR_CONNECT_CLR if serverAPI.GetConnectionStatus() else STATUS_BAR_DISCONNECT_CLR, 
+        text= STATUS_BAR_CONNECT_TXT if serverAPI.GetConnectionStatus() else STATUS_BAR_DISCONNECT_TXT
         )
     window_handler.GetCurWindow().connection_status_label.update()
 

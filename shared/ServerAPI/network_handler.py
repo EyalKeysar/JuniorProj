@@ -68,7 +68,17 @@ class NetworkHandler():
             return False
     
 
-
+    def GetUpdates(self):
+        if(self.in_creation):
+            return False
+        try:
+            self.client_socket.send(GET_UPDATES.encode())
+            respond = self.client_socket.recv(1024).decode()
+            return respond
+        
+        except Exception as e:
+            self.HandelConnectionError(e)
+            return False
         
         
     

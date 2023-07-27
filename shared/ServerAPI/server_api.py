@@ -26,6 +26,16 @@ class ServerAPI:
             self.network_handler.HandelConnectionError(e)
 
             return False
+        
+
+    def GetUpdates(self):
+        return None
+    
+    def GetPlayers(self):
+        return [[0, 0], [100, 100]]
+
+    def GetShoots(self):
+        return [[50, 50]]
 
     
     def GetConnectionStatus(self):

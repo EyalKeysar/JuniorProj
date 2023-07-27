@@ -15,20 +15,26 @@ class Game:
         self.gui = GameGUI()
 
         self.players = []
-        self.players.append(Player(PLAYER_START_POS))
-        self.players.append(Player(PLAYER_START_POS))
+        self.shoots = []
 
     def get_players(self, serverAPI):
         self.players = serverAPI.GetPlayers()
 
 
     def run(self):
+
         while self.gui.is_running:
+            
+            self.serverAPI.GetUpdates()
+            self.players = self.serverAPI.GetPlayers()
+            self.shoots = self.serverAPI.GetShoots()
+
+            # self.gui
 
             self.gui.draw_grid()
+            self.gui.draw_players(self.players)
+            self.gui.draw_bullets(self.shoots)
 
-            for player in self.players:
-                player.draw(self.gui.screen)
   
             self.gui.update()
             for key in self.gui.events:
