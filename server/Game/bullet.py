@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class shoot(ABC):
+class Bullet(ABC):
     @abstractmethod
     def __init__(self):
         pass

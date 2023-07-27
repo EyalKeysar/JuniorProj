@@ -18,4 +18,11 @@ class Bullet():
                 if self.sprite[i*self.sprite_size[0] + j] == 1:
                     draw_cell_by_grid(screen, (start_x + j, start_y + i), BULLET_COLOR)
     
-    def draw_
+    def draw_upsidedown(self, screen):
+        start_x = self.pos[0]
+        start_y = self.pos[1]
+
+        for i in range(self.sprite_size[1]):
+            for j in range(self.sprite_size[0]):
+                if self.sprite[i*self.sprite_size[0] + j] == 1:
+                    draw_cell_by_grid(screen, (start_x + j, start_y + i), BULLET_COLOR)

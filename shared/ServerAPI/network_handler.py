@@ -1,4 +1,5 @@
 import socket
+import time
 # from shared import net_constants
 import threading
 from shared.ServerAPI.mtnp import *
@@ -46,25 +47,36 @@ class NetworkHandler():
     def MovePlayerLeft(self):
         if(self.in_creation):
             return False
+        
+        self.in_creation = True
         try:
             self.client_socket.send(MOVE_LEFT.encode())
-            respond = self.client_socket.recv(1024).decode()
-            return respond
+            print('')
+            self.in_creation = False
+            return
         
         except Exception as e:
             self.HandelConnectionError(e)
+            self.in_creation = False
             return False
     
     def MovePlayerRight(self):
+
         if(self.in_creation):
             return False
+
+        self.in_creation = True
+
         try:
             self.client_socket.send(MOVE_RIGHT.encode())
-            respond = self.client_socket.recv(1024).decode()
-            return respond
+            print('')
+            self.in_creation = False
+            return
         
         except Exception as e:
+            print("Error from MovePlayerRight")
             self.HandelConnectionError(e)
+            self.in_creation = False
             return False
     
 
@@ -77,10 +89,21 @@ class NetworkHandler():
             return respond
         
         except Exception as e:
+            print("Error from GetUpdates")
             self.HandelConnectionError(e)
             return False
         
+    def shoot(self):
+        if(self.in_creation):
+            return False
+        try:
+            self.client_socket.send(SHOOT.encode())
+            return True
         
+        except Exception as e:
+            print("Error from shoot")
+            self.HandelConnectionError(e)
+            return False
     
     def HandelConnectionError(self, e):
         """
@@ -91,4 +114,4 @@ class NetworkHandler():
         if(e.errno == 10054 or e.errno == 10056):
             self.client_socket = self.CreateSocketThreaded()
         else:
-            self.logger.log(" * Failed to send MTN request\nerrno:" + str(e.errno) + "\n" + str(e))
+            self.logger.log(" * Error Handeling\nerrno:" + str(e.errno) + "\n" + str(e))

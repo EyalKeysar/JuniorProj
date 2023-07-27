@@ -9,6 +9,10 @@ class ServerAPI:
         self.network_handler = NetworkHandler(self.logger)
         self.is_authenticated = False
 
+        self.raw_data = ""
+        self.raw_players = ""
+        self.raw_shoots = ""
+
     # General
     def Build(self):
         self.network_handler.CreateSocketThreaded()
@@ -29,13 +33,74 @@ class ServerAPI:
         
 
     def GetUpdates(self):
-        return None
+        if(self.network_handler.in_creation):
+            return False
+        
+        respond = self.network_handler.GetUpdates()
+        if(not respond):
+            self.raw_data = ""
+            return
+        self.raw_data = respond
+        
+        try:
+            self.raw_players = self.raw_data.split("\n")[0]
+            if(self.raw_data.split("\n")[1] == "False"):
+                self.raw_shoots = ""
+            else:
+                self.raw_shoots = self.raw_data.split("\n")[1]
+        except Exception as e:
+            print(e)
+            self.raw_players = ""
+            self.raw_shoots = ""    
     
     def GetPlayers(self):
-        return [[0, 0], [100, 100]]
+
+        if(self.raw_players == ""):
+            return []
+
+        try:
+            self.raw_players_split = self.raw_players.split(";")
+            players = []
+            for player in self.raw_players_split:
+                player = player.split(",")
+                player[0] = int(player[0])
+                player[1] = int(player[1])
+
+                if(player[2] == "0"):
+                    player[2] = False
+                else:
+                    player[2] = True
+
+                
+                players.append(player)
+        except Exception as e:
+            print("PLAYERS" + str(e))
+            players = []
+
+        return players
 
     def GetShoots(self):
-        return [[50, 50]]
+
+        if(self.raw_shoots == ""):
+            return []
+
+
+        try:
+            self.raw_shoots_split = self.raw_shoots.split(";")
+            shoots = []
+            for shoot in self.raw_shoots_split:
+                shoot = shoot.split(",")
+                shoot[0] = int(shoot[0])
+                shoot[1] = int(shoot[1])
+
+                
+                shoots.append(shoot)
+        except Exception as e:
+            print("BULLETS" + str(e))
+            shoots = []
+
+
+        return shoots
 
     
     def GetConnectionStatus(self):
@@ -72,30 +137,12 @@ class ServerAPI:
     def MovePlayerLeft(self):
         respond =  self.network_handler.MovePlayerLeft()
         
-        if(respond == False):
-            return False
-        else:
-            pos = respond.split(",")
-            return [int(pos[0]), int(pos[1])]
-        
-    
     def MovePlayerRight(self):
         respond = self.network_handler.MovePlayerRight()
 
-        if(respond == False):
-            return False
-        else:
-            pos = respond.split(",")
-            return [int(pos[0]), int(pos[1])]
-
     def Shoot(self):
-        respond = self.network_handler.Shoot()
+        respond = self.network_handler.shoot()
 
-        if(respond == False):
-            return False
-        else:
-            # NEED TO ADD
-            pass
             
 
 

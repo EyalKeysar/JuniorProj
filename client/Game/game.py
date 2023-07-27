@@ -1,4 +1,5 @@
 import pygame
+import time
 import sys
 
 from client.Game.GUI.gamegui import GameGUI
@@ -26,26 +27,28 @@ class Game:
         while self.gui.is_running:
             
             self.serverAPI.GetUpdates()
+
+
             self.players = self.serverAPI.GetPlayers()
             self.shoots = self.serverAPI.GetShoots()
 
+
             # self.gui
+
+            # calculate how long to draw the frame for
 
             self.gui.draw_grid()
             self.gui.draw_players(self.players)
             self.gui.draw_bullets(self.shoots)
-
   
             self.gui.update()
             for key in self.gui.events:
+
                 if(key == pygame.K_LEFT):
-                    respond = self.serverAPI.MovePlayerLeft()
-                    if(respond != False):
-                        self.players[0].pos = respond
+                    self.serverAPI.MovePlayerLeft()
                 if(key == pygame.K_RIGHT):
-                    respond = self.serverAPI.MovePlayerRight()
-                    if(respond != False):
-                        self.players[0].pos = respond
+                    self.serverAPI.MovePlayerRight()
+
                 if(key == pygame.K_UP):
                     self.serverAPI.Shoot()
                 if(key == pygame.K_DOWN):

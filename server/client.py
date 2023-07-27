@@ -30,6 +30,9 @@ class Client():
 
     def GetAddress(self):
         return self.data["address"]
+
+    def SetAddress(self, value):
+        self.data["address"] = value
     
     def GetClientData(self):
         return self.data

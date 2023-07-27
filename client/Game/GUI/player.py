@@ -4,10 +4,14 @@ from client.Game.GUI.pygame_constants import *
 from shared.game_constants import *
 
 class Player:
-    def __init__(self, x, y):
+    def __init__(self, x, y, isEnemy):
+        self.isEnemy = isEnemy
         self.pos = [x, y]
         self.sprite = PLAYER_SPRITE
         self.sprite_size = PLAYER_SPRITE_SIZE
+
+        self.reverse_sprite = PLAYER_SPRITE[::-1]
+        self.reverse_sprite_size = PLAYER_SPRITE_SIZE
 
     def draw(self, screen):
         start_x = self.pos[0]
@@ -17,3 +21,12 @@ class Player:
             for j in range(self.sprite_size[0]):
                 if self.sprite[i*self.sprite_size[0] + j] == 1:
                     draw_cell_by_grid(screen, (start_x + j, start_y + i), PLAYER_1_COLOR)
+
+    def draw_upsidedown(self, screen):
+        start_x = self.pos[0]
+        start_y = self.pos[1]
+
+        for i in range(self.reverse_sprite_size[1]):
+            for j in range(self.reverse_sprite_size[0]):
+                if self.reverse_sprite[i*self.reverse_sprite_size[0] + j] == 1:
+                    draw_cell_by_grid(screen, (start_x + j, start_y + i), PLAYER_2_COLOR)

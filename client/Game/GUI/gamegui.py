@@ -23,8 +23,11 @@ class GameGUI:
 
     def draw_players(self, players):
         for player in players:
-            cur_player = Player(player[0], player[1])
-            cur_player.draw(self.screen)
+            cur_player = Player(player[0], player[1], player[2])
+            if(player[2] == True):
+                cur_player.draw(self.screen)
+            else:
+                cur_player.draw_upsidedown(self.screen)
 
     def draw_bullets(self, bullets):
         for bullet in bullets:
