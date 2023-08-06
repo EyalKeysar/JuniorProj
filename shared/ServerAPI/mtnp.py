@@ -5,7 +5,14 @@ import socket
 from shared.ServerAPI.api_constants import *
 
 def client_handshake(logger, client_socket):
+    """
+        Performs a handshake with the server.
+        Handeling failed handshakes by restarting the socket and trying again.
 
+        :param logger: The logger object.
+        :param client_socket: The socket to perform the handshake with.
+        :return: The socket after the handshake.
+    """
     data_from_server = ""
     while(data_from_server != SYN_ACK):
         # Try to connect to the server and perform handshake.    
@@ -14,9 +21,10 @@ def client_handshake(logger, client_socket):
             client_socket.send(SYN_REQ.encode())
     
             data_from_server = client_socket.recv(1024).decode()
+            continue
             
         except Exception as e:
-            logger.log(" * Failed To Create Socket \n" + str(e))
+            logger.log(" ! handshake failed, restaeting socket and handshaking again. \n" + str(e))
             client_socket = socket.socket()
             client_socket.settimeout(0.5)
             continue
@@ -25,6 +33,7 @@ def client_handshake(logger, client_socket):
     return client_socket
 
 def server_handshake(client, clients_list):
+    client.GetSocket().settimeout(2)
     timeout = 0
     handshake_data = ""
     # Wait for handshake from client.
@@ -36,7 +45,7 @@ def server_handshake(client, clients_list):
             client.GetSocket().send(SYN_ACK.encode())
 
         except Exception as e:
-            print(e)
+            print("error in handshake - " + str(e))
             timeout += 1
             if(timeout > 10):
                 print("timeout for SYN " + str(client.GetAddress()))
@@ -47,6 +56,7 @@ def server_handshake(client, clients_list):
 
                 return
             continue
+    client.GetSocket().settimeout(0.5)
 
 
 

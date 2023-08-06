@@ -51,7 +51,7 @@ class NetworkHandler():
         self.in_creation = True
         try:
             self.client_socket.send(MOVE_LEFT.encode())
-            print('')
+            print(end='')
             self.in_creation = False
             return
         
@@ -65,27 +65,23 @@ class NetworkHandler():
         if(self.in_creation):
             return False
 
-        self.in_creation = True
-
         try:
             self.client_socket.send(MOVE_RIGHT.encode())
-            print('')
-            self.in_creation = False
+            print(end='')
             return
         
         except Exception as e:
             print("Error from MovePlayerRight")
             self.HandelConnectionError(e)
-            self.in_creation = False
             return False
     
 
     def GetUpdates(self):
-        if(self.in_creation):
-            return False
         try:
             self.client_socket.send(GET_UPDATES.encode())
+            self.client_socket.settimeout(None)
             respond = self.client_socket.recv(1024).decode()
+            self.client_socket.settimeout(0.5)
             return respond
         
         except Exception as e:

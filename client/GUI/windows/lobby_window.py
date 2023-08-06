@@ -3,9 +3,10 @@ from client.GameConstants import *
 from client.GUI.windows.windsows_constants import *
 from client.GUI.windows.login_window import LoginWindow
 from client.GUI.windows.register_window import RegisterWindow
+from client.GUI.windows.window import Window
 
 
-class LobbyWindow(tk.Toplevel):
+class LobbyWindow(Window):
     def __init__(self, parent):
         super().__init__(parent)
         self.geometry(f"{SCREEN_WIDTH}x{SCREEN_HEIGHT}")

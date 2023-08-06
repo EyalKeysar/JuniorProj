@@ -5,6 +5,11 @@ import sys
 import os
 import random
 
+
+
+            # ! NOTE FOR ME IN FRIDAY: !!!!! SERVER NOT STABLE RESPONDING UPDATE REQUEST FIND A SOLUTION !!!!!
+
+
 from server.server_network_handler import ServerNetworkHandler
 from server.Game.player import Player
 from server.Game.game_logic import GameLogic
@@ -88,15 +93,14 @@ class Server:
         return True
     
     def handle_error(self, e, client):
-        print("in error " + str(e))
-        if(e.errno == 10038):
+        print("handling error " + str(e) + " errno" + str(e.errno))
+        if(e.errno == 10038 or str(e) == "timed out"): #
             data = None
         elif(e.errno == 10054 or e.errno == 10056):
             for current_client in self.client_list:
                 if(current_client.GetAddress()[0] == client.GetAddress()[0]):
                     self.client_list.remove(current_client)
-            client.close()
-
+            client.GetSocket().close()
             return
         else:
             raise e

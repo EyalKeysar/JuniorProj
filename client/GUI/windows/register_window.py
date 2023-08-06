@@ -4,8 +4,9 @@ import tkinter.messagebox
 from typing import Any
 from client.GameConstants import *
 from client.GUI.windows.windsows_constants import *
+from client.GUI.windows.window import Window
 
-class RegisterWindow(tk.Toplevel):
+class RegisterWindow(Window):
     def __init__(self, parent):
         super().__init__(parent)
         self.geometry(f"{REGISTER_WINDOW_WIDTH}x{REGISTER_WINDOW_HEIGHT}")

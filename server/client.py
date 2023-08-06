@@ -9,6 +9,7 @@ class Client():
             "is_authenticated": False,
             "username": None
         }
+        print(f"Client {self.data} initialized")
 
     def IsAuthenticated(self):
         return self.data["is_authenticated"]

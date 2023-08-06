@@ -15,6 +15,7 @@ class ServerAPI:
 
     # General
     def Build(self):
+        self.logger.log(" * Building server API")
         self.network_handler.CreateSocketThreaded()
 
     def CheckConnection(self):

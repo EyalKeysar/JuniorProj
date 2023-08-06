@@ -1,8 +1,9 @@
 import tkinter as tk
 from client.GameConstants import *
 from client.GUI.windows.windsows_constants import *
+from client.GUI.windows.window import Window
 
-class LoginWindow(tk.Toplevel):
+class LoginWindow(Window):
     def __init__(self, parent):
         super().__init__(parent)
         self.geometry(f"{LOGIN_WINDOW_WIDTH}x{LOGIN_WINDOW_HEIGHT}")

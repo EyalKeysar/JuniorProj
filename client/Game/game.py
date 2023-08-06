@@ -13,7 +13,6 @@ from shared.ServerAPI.api_constants import *
 class Game:
     def __init__(self, serverAPI):
         self.serverAPI = serverAPI
-        self.gui = GameGUI()
 
         self.players = []
         self.shoots = []
@@ -23,6 +22,7 @@ class Game:
 
 
     def run(self):
+        self.gui = GameGUI()
 
         while self.gui.is_running:
             
