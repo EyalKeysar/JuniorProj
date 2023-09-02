@@ -34,7 +34,7 @@ class MainWindow(Window):
         self.register_button.pack()
 
     def login_command(self):
-        self.window_handler.ChangeWindow(LoginWindow)
+        self.window_handler.PopWindow(LoginWindow)
 
 
     def register_command(self):

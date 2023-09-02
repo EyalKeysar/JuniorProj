@@ -2,6 +2,7 @@
 import threading
 from shared.ServerAPI.network_handler import NetworkHandler
 from shared.ServerAPI.api_constants import *
+import time
 
 class ServerAPI:
     def __init__(self, logger) -> None:
@@ -15,12 +16,14 @@ class ServerAPI:
 
     # General
     def Build(self):
+        while(self.network_handler.in_creation):
+            time.sleep(0.1)
         self.logger.log(" * Building server API")
         self.network_handler.CreateSocketThreaded()
 
     def CheckConnection(self):
         if(self.network_handler.in_creation):
-            return False
+            time.sleep(0.1)
         
         respond, e = self.network_handler.CheckConnection()
         if(respond):
@@ -35,7 +38,7 @@ class ServerAPI:
 
     def GetUpdates(self):
         if(self.network_handler.in_creation):
-            return False
+            time.sleep(0.1)
         
         respond = self.network_handler.GetUpdates()
         if(not respond):
@@ -112,7 +115,15 @@ class ServerAPI:
 
     # Sign in
     def Login(self, username, password) -> bool:
-        pass
+        while(self.network_handler.in_creation):
+            time.sleep(0.1)
+        
+        respond = self.network_handler.Login(username, password)
+        if(respond):
+            self.is_authenticated = True
+        else:
+            self.is_authenticated = False
+        return respond
 
     def Register(self, username, password, mail):
         pass

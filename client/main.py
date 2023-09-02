@@ -18,6 +18,12 @@ from shared.logger import Logger
 from shared.ServerAPI.server_api import ServerAPI 
 from shared.debug import *
 
+def periodic_function(func, root):
+    def wrapper(*args, **kwargs):
+        
+        func(*args, **kwargs)
+
+    return wrapper
 
 def update(root, window_manager, serverAPI):
 
@@ -64,7 +70,7 @@ def run():
     root.after(10, serverAPI.Build)
     
     # root.after(200, game.run)
-    # # root.after(300, update, root, None, serverAPI)
+    root.after(300, update, root, None, serverAPI)
     # # root.after(150, update_status_bar, root, window_handler, serverAPI)
 
     root.mainloop()

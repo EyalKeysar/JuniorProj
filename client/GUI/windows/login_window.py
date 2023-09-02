@@ -4,8 +4,11 @@ from client.GUI.windows.windsows_constants import *
 from client.GUI.windows.window import Window
 
 class LoginWindow(Window):
-    def __init__(self, parent):
+    def __init__(self, parent, serverAPI):
         super().__init__(parent)
+
+        self.serverAPI = serverAPI
+
         self.geometry(f"{LOGIN_WINDOW_WIDTH}x{LOGIN_WINDOW_HEIGHT}")
         self.title("Login")
         self.resizable(False, False)
@@ -28,32 +31,4 @@ class LoginWindow(Window):
         self.login_button.pack()
 
     def login(self):
-        username = self.username_entry.get()
-        password = self.password_entry.get()
-    
-        if(self.check_login(username, password)):
-            print("Login successful")
-            self.username = username
-            self.password = password
-            self.logged_in = True
-        else:
-            print("Login failed")
-
-        self.destroy()
-
-    def check_login(self, username, password):
-        try:
-            with open(PATH_TO_DB) as f:
-                for line in f:
-                    cur_user = line.split(";")[0]
-                    cur_pass = line.split(";")[1]
-                    print(f"cur_user: {cur_user}\ncur_pass: {cur_pass}")
-                    if(username == cur_user and password == cur_pass):
-                        f.close()
-                        return True
-            f.close()
-            return False
-        except Exception as e:
-            print(e)
-            return False
-        
+        self.serverAPI.login(self.username_entry.get(), self.password_entry.get())

@@ -13,11 +13,13 @@ def client_handshake(logger, client_socket):
         :param client_socket: The socket to perform the handshake with.
         :return: The socket after the handshake.
     """
+    print("client handshake called")
     data_from_server = ""
     while(data_from_server != SYN_ACK):
         # Try to connect to the server and perform handshake.    
         try:
             client_socket.connect((SERVER_IP, SERVER_PORT))
+            print("connected to server, handshaking")
             client_socket.send(SYN_REQ.encode())
     
             data_from_server = client_socket.recv(1024).decode()
@@ -33,6 +35,7 @@ def client_handshake(logger, client_socket):
     return client_socket
 
 def server_handshake(client, clients_list):
+    print("server handshake called")
     client.GetSocket().settimeout(2)
     timeout = 0
     handshake_data = ""
@@ -41,22 +44,24 @@ def server_handshake(client, clients_list):
         try:
             handshake_data = client.GetSocket().recv(1024).decode()
             if(handshake_data != SYN_REQ):
+                print("error in handshake - " + str(handshake_data))
                 raise ConnectionError
             client.GetSocket().send(SYN_ACK.encode())
 
         except Exception as e:
-            print("error in handshake - " + str(e))
+            print(" ---- error in handshake - " + str(e))
+
             timeout += 1
             if(timeout > 10):
                 print("timeout for SYN " + str(client.GetAddress()))
                 remove_client(client, clients_list)
                 client.GetSocket().close()
-
                 remove_client(client, clients_list)
-
                 return
             continue
-    client.GetSocket().settimeout(0.5)
+
+    print("handshake completed")
+    client.GetSocket().settimeout(2)
 
 
 

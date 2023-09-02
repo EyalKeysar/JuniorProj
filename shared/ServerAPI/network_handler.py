@@ -32,6 +32,23 @@ class NetworkHandler():
 
         return respond, e
     
+
+    def Login(self, username, password):
+        if(self.in_creation):
+            return False
+        
+        self.in_creation = True
+        try:
+            login_request = LOGIN_REQUEST + "\n" + username + ";" + password
+            self.client_socket.send(login_request.encode())
+            respond = self.client_socket.recv(1024).decode()
+            self.in_creation = False
+            return respond == LOGIN_TRUE
+        except Exception as e:
+            self.HandelConnectionError(e)
+            self.in_creation = False
+            return False
+
     def IsAuthenticated(self):
         if(self.in_creation):
             return False
