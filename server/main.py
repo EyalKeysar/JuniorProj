@@ -51,6 +51,7 @@ class Server:
 
     def handle_client(self, client):
         client.in_handeling = True
+        client.GetSocket().settimeout(0.5)
         try:
             data = client.GetSocket().recv(1024)
         except Exception as e:
@@ -67,7 +68,7 @@ class Server:
 
         # network
         if(data == MAINTAIN_CONNECTION):
-            print("maintain connection $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ ")
+            print("maintain connection $$$$$$$$$ ")
             client.GetSocket().send(MAINTAIN_OK.encode())
 
         if(data == AUTH_REQUEST):
