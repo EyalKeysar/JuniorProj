@@ -51,25 +51,19 @@ class Server:
 
     def handle_client(self, client):
         client.in_handeling = True
-        client.GetSocket().settimeout(0.5)
-        try:
-            data = client.GetSocket().recv(1024)
-        except Exception as e:
-            self.handle_error(e, client)
-            for current_client in self.client_list:
-                if(current_client.GetAddress()[0] == client.GetAddress()[0]):
-                    self.client_list.remove(current_client)
-            client.GetSocket().close()
-
-            client.in_handeling = False
-            return
+        print("handling client")
+        client.GetSocket().settimeout(1)
+        
+        data = client.GetSocket().recv(1024)
 
         data = data.decode()
 
         # network
         if(data == MAINTAIN_CONNECTION):
-            print("maintain connection $$$$$$$$$ ")
             client.GetSocket().send(MAINTAIN_OK.encode())
+            print("maintain connection $$$$$$$$$ ")
+            client.in_handeling = False
+            return
 
         if(data == AUTH_REQUEST):
             return self.is_authenticated(client)
@@ -104,7 +98,6 @@ class Server:
     def handle_clients(self):
         for client in self.client_list:
             if(not client.in_handeling):
-                print("handling client")
                 client_thread = threading.Thread(target=self.handle_client, args=(client,))
                 client_thread.start()
                 

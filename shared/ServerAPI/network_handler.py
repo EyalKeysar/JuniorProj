@@ -2,7 +2,7 @@ import socket
 import time
 # from shared import net_constants
 import threading
-from shared.ServerAPI.mtnp import *
+from shared.ServerAPI.api_constants import *
 
 
 class NetworkHandler():
@@ -20,7 +20,14 @@ class NetworkHandler():
     def CreateSocket(self):
         self.client_socket = socket.socket()
         self.client_socket.settimeout(0.5)
-        self.client_socket = client_handshake(self.logger, self.client_socket)
+
+        # handshake
+        try:
+            self.client_socket.connect((SERVER_IP, SERVER_PORT))
+            self.connection_status = True
+            self.logger.log(" * Connected to server")
+            
+
         self.in_creation = False
 
     def CheckConnection(self):
