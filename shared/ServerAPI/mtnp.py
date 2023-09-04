@@ -70,12 +70,15 @@ def client_mtn(logger, client_socket):
         Checks if the connection to the server is still alive.
         Sends a MTN request to the server and checks the response.
     """
+    print("client mtn called")
     try:
         client_socket.send(MAINTAIN_CONNECTION.encode())
         MNTN_recv = client_socket.recv(1024).decode()
+        print("MNTN Recv = " + str(MNTN_recv))
         return MNTN_recv == MAINTAIN_OK, None
     
     except Exception as e:
+        print("error in mtn - " + str(e))
         return False, e
 
 

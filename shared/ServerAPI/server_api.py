@@ -29,6 +29,7 @@ class ServerAPI:
         if(respond):
             self.network_handler.connection_status = True
         else:
+            print("therespond = " + str(respond))
             self.logger.log(" * Failed to send MTN request\nerrno:" + str(e.errno))
             self.network_handler.connection_status = False
             self.network_handler.HandelConnectionError(e)

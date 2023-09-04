@@ -36,7 +36,6 @@ class Server:
         self.logger.log("Server is running")
 
         while True:
-
             # if(len(self.client_list) != 0):
             #     # print(self.client_list)
             #     pass
@@ -60,6 +59,8 @@ class Server:
                 if(current_client.GetAddress()[0] == client.GetAddress()[0]):
                     self.client_list.remove(current_client)
             client.GetSocket().close()
+
+            client.in_handeling = False
             return
 
         data = data.decode()
@@ -95,10 +96,14 @@ class Server:
 
 
             client.GetSocket().send(respond[:-1].encode())
+
+        client.in_handeling = False
+        return
     
     def handle_clients(self):
         for client in self.client_list:
-            if(not client.in_handeling):    
+            if(not client.in_handeling):
+                print("handling client")
                 client_thread = threading.Thread(target=self.handle_client, args=(client,))
                 client_thread.start()
                 

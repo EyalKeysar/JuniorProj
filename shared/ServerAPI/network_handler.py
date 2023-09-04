@@ -25,6 +25,7 @@ class NetworkHandler():
 
     def CheckConnection(self):
         if(self.in_creation):
+            print("currently in creation canot check connection")
             self.connection_status = False
             return False, None
             

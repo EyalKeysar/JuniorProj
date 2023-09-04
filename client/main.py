@@ -35,7 +35,8 @@ def update(root, window_manager, serverAPI):
     
     serverAPI.CheckConnection()
 
-    root.after(50, update, root, window_manager, serverAPI)
+    time.sleep(1)
+    root.after(100, update, root, window_manager, serverAPI)
 
     
 
