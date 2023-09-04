@@ -47,7 +47,8 @@ def update_status_bar(root, window_handler, serverAPI):
         )
     window_handler.GetCurWindow().connection_status_label.update()
 
-    root.after(100, update_status_bar, root, window_handler, serverAPI)
+    # time.sleep(1)
+    root.after(50, update_status_bar, root, window_handler, serverAPI)
 
 
 def run():
@@ -72,7 +73,7 @@ def run():
     
     # root.after(200, game.run)
     root.after(300, update, root, None, serverAPI)
-    # # root.after(150, update_status_bar, root, window_handler, serverAPI)
+    root.after(150, update_status_bar, root, window_handler, serverAPI)
 
     root.mainloop()
     
